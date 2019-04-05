@@ -50,27 +50,11 @@
 
 
 
-	@if($servicio == 'Prueba Academia')
+	@if($servicio == 'Academia')
 
 		<div class="col-lg-12">
 
 			@include('adminlte::academia.datos_prueba', ['locaciones' => $locaciones, 'dias_deshabilitados' => $dias_deshabilitados])	
-
-		</div>
-
-	@endif
-
-
-
-	@if($servicio == 'Academia')
-
-		<div class="col-lg-12" id="academia-horario" style="padding-top: 15px;">
-
-
-
-			@include('adminlte::academia.horarios')	
-
-
 
 		</div>
 

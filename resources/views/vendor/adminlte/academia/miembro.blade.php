@@ -106,7 +106,7 @@
 
                                                 <thead>
 
-                                                    <th colspan="7" class="text-center"> ATLETAS REGISTRADOS </th>
+                                                    <th colspan="5" class="text-center"> ATLETAS REGISTRADOS </th>
 
                                                 </thead>
 
@@ -114,17 +114,13 @@
 
                                                     <tr>
 
-                                                        <th>Fecha de nac.</th>
-
-                                                        <th>Nombre</th>
-
-                                                        <th>Apellido</th>
-
-                                                        <th>Cédula</th>
-
+                                                        <th>Nombre Completo</th>
+                                                        
                                                         <th>Locación</th>
 
                                                         <th>Días</th>
+
+                                                        <th>¿Desea uniforme?</th> 
 
                                                         <th><i class="fa fa-gears"></i></th>
 

@@ -3,7 +3,7 @@
 	{!! Form::label('cedula', 'Cédula', array('class' => 'control-label')) !!}<strong><span style='color: red;'>*</span></strong>
 
 	{!! Form::hidden('representante[id]', null, array('class' => 'form-control input-sm', 'id' => 'representante-id')) !!}
-	{!! Form::text('representante[cedula]', null, array('class' => 'form-control input-sm', 'required' => 'required', 'onKeyPress'=>"return soloNumeros(event)", 'id' => 'representante-cedula')) !!}
+	{!! Form::text('representante[cedula]', null, array('class' => 'form-control input-sm', 'onKeyPress'=>"return soloNumeros(event)", 'id' => 'representante-cedula')) !!}
 
 </div>
 
@@ -11,7 +11,7 @@
 
 	{!! Form::label('nombres', 'Nombres', array('class' => 'control-label')) !!}<strong><span style='color: red;'>*</span></strong>
 
-	{!! Form::text('representante[nombres]', null, array('class' => 'form-control input-sm', 'required' => 'required', 'id' => 'representante-nombre')) !!}
+	{!! Form::text('representante[nombres]', null, array('class' => 'form-control input-sm', 'id' => 'representante-nombre')) !!}
 
 </div>
 
@@ -21,7 +21,7 @@
 
 	{!! Form::label('apellidos', 'Apellidos', array('class' => 'control-label')) !!}<strong><span style='color: red;'>*</span></strong>
 
-	{!! Form::text('representante[apellidos]', null, array('class' => 'form-control input-sm', 'required' => 'required', 'id' => 'representante-apellido')) !!}
+	{!! Form::text('representante[apellidos]', null, array('class' => 'form-control input-sm', 'id' => 'representante-apellido')) !!}
 
 </div>
 
@@ -31,7 +31,7 @@
 
 	{!! Form::label('telf_contacto', 'Teléfono de contacto', array('class' => 'control-label')) !!}<strong><span style='color: red;'>*</span></strong>
 
-	{!! Form::text('representante[telf_contacto]', null, array('class' => 'form-control input-sm', 'required' => 'required', 'onKeyPress'=>"return soloNumeros(event)", 'id' => 'representante-telefono')) !!}
+	{!! Form::text('representante[telf_contacto]', null, array('class' => 'form-control input-sm', 'onKeyPress'=>"return soloNumeros(event)", 'id' => 'representante-telefono')) !!}
 
 </div>
 
@@ -41,7 +41,7 @@
 
 	{!! Form::label('email', 'Correo electrónico', array('class' => 'control-label')) !!}<strong><span style='color: red;'>*</span></strong>
 
-	{!! Form::text('representante[email]', null, array('class' => 'form-control input-sm', 'required' => 'required', 'id' => 'representante-email')) !!}
+	{!! Form::text('representante[email]', null, array('class' => 'form-control input-sm', 'id' => 'representante-email')) !!}
 
 </div>
 
@@ -51,6 +51,6 @@
 
     {!! Form::label('red_social', 'Instagram/Facebook', array('class' => 'control-label')) !!}<strong><span id="red-social-representante" style='color: red;'>*</span></strong>
 
-    {!! Form::text('representante[red_social]', null, array('class' => 'form-control input-sm', 'id' => 'representante-red-social', 'required' => 'required')) !!}
+    {!! Form::text('representante[red_social]', null, array('class' => 'form-control input-sm', 'id' => 'representante-red-social')) !!}
 
 </div>

@@ -1,4 +1,4 @@
-<div class="text-center"><h4>Seleccionar</h4></div>
+<div class="text-center"><h4>Tomar clase de prueba</h4></div>
 <input type="hidden" name="dias_no_academia" id="dias_no_academia" value="{{ $dias_deshabilitados }}"> 
 
 <div class="col-lg-6" style="padding: 5px;">
@@ -7,7 +7,7 @@
     <div class="iradio icheck">
     @foreach($locaciones AS $key => $locacion)
         <label>
-            <input value="{{ $locacion->id }}" type="radio" name="atleta[locacion_prueba]"> {{ $locacion->ubicacion }}
+            <input value="{{ $locacion->id }}" type="radio" name="locacion_prueba"> {{ $locacion->ubicacion }}
         </label>
     @endforeach
     </div>

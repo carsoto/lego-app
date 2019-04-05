@@ -58,7 +58,7 @@
 
 <div class="col-lg-3 col-md-3 col-sm-4" style="padding: 5px;">
 
-	{!! Form::label('institucion', 'Colegio') !!}<strong><span id="instituto-atleta" style='color: red;'>*</span></strong>
+	{!! Form::label('institucion', 'Colegio/Institución') !!}<strong><span id="instituto-atleta" style='color: red;'>*</span></strong>
 
 	{!! Form::text('atleta[institucion]', null, array('class' => 'form-control input-sm', 'id' => 'atleta_instituto')) !!}
 

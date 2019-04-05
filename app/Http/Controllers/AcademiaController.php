@@ -234,11 +234,7 @@ class AcademiaController extends Controller
 
         $datos_tarifas['edad_inicio'] = $configuraciones['Edad minima'];
 
-
-
         $horarios_academia = array();
-
-
 
         $dias_semana_desc = Funciones::descripcion_semana();
 
@@ -250,15 +246,13 @@ class AcademiaController extends Controller
 
         $datos_tarifas['clase_diaria'] = $configuraciones['Clase por dia'];
 
-        
-
         foreach ($horarios as $key => $horario) {
 
             $datos_tarifas['edades'][$horario->academia_horario->edad_inicio.'_'.$horario->academia_horario->edad_fin] = "";
 
             $datos_tarifas['horario'][$horario->academia_horario->edad_inicio] = array('edad_inicio' => $horario->academia_horario->edad_inicio, 'edad_fin' => $horario->academia_horario->edad_fin, 'hora' => $horario->academia_horario->hora_inicio.' - '.$horario->academia_horario->hora_fin);
 
-            
+            $locaciones[$horario->locaciones_id] = $horario->locacion;
 
             //$tarifas[$horario->locaciones_id][$horario->academia_horario->edad_inicio.'_'.$horario->academia_horario->edad_fin][$horario->id] = $horario->academia_tarifa;
 
@@ -266,9 +260,7 @@ class AcademiaController extends Controller
 
         }
 
-
-
-        return view('adminlte::academia.inscripcion', array('locaciones' => $locaciones, 'tallas' => $tallas, 'preguntas' => $preguntas, 'datos_tarifas' => $datos_tarifas, 'horarios' => $horarios_academia, 'dias_de_clases' => $dias_de_clases, 'dias_semana_desc' => $dias_semana_desc, 'tipos_pago' => $tipos_pago));
+        return view('adminlte::academia.inscripcion', array('locaciones' => $locaciones, 'tallas' => $tallas, 'preguntas' => $preguntas, 'datos_tarifas' => $datos_tarifas, 'horarios' => $horarios_academia, 'dias_de_clases' => $dias_de_clases, 'dias_semana_desc' => $dias_semana_desc, 'tipos_pago' => $tipos_pago, 'dias_deshabilitados' => $deshabilitar_dias));
 
     }
 
@@ -276,33 +268,49 @@ class AcademiaController extends Controller
 
     public function registrarprueba(Request $request){
 
-
-
         try {
 
             $cantidad_alumnos = count($request->form_atleta);
 
             $atletas_registrados = array();
 
-            $representante = Representante::firstOrCreate(['cedula' => $request->representante["cedula"]], [ 
+            if($request->representante["cedula"] != null){
+                $representante = Representante::firstOrCreate(['cedula' => $request->representante["cedula"]], [ 
 
-                'cedula' => $request->representante["cedula"],
+                    'cedula' => $request->representante["cedula"],
 
-                'nombres' => $request->representante["nombres"],
+                    'nombres' => $request->representante["nombres"],
 
-                'apellidos' => $request->representante["apellidos"],
+                    'apellidos' => $request->representante["apellidos"],
 
-                'telf_contacto' => $request->representante["telf_contacto"],
+                    'telf_contacto' => $request->representante["telf_contacto"],
 
-                'email' => $request->representante["email"],
+                    'email' => $request->representante["email"],
 
-                'red_social' => $request->representante["red_social"],
+                    'red_social' => $request->representante["red_social"],
 
-            ]);
-
-
-
+                ]);    
+            }
+            
             foreach($request->form_atleta AS $key => $atleta){
+
+                if($request->representante["cedula"] == null){
+                    $representante = Representante::firstOrCreate(['cedula' => $atleta["cedula"]], [ 
+
+                        'cedula' => $atleta["cedula"],
+
+                        'nombres' => $atleta["nombre"],
+
+                        'apellidos' => $atleta["apellido"],
+
+                        'telf_contacto' => "",
+
+                        'email' => "",
+
+                        'red_social' => $atleta["red_social"],
+
+                    ]);    
+                }
 
                 if($atleta["cedula"] != ""){
 
@@ -421,8 +429,6 @@ class AcademiaController extends Controller
             $status = false;
 
         }
-
-
 
         return view('adminlte::academia.inscripcion_finalizada', array('message' => $msg, 'status' => $status, 'atletas_registrados' => $atletas_registrados));
 

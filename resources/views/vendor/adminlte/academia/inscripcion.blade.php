@@ -56,17 +56,19 @@
 
                         </div>
 
-                        {!! Form::open(['route' => 'academia.store', 'role' => 'form', 'id' => 'form-inscripcion']) !!}
+                        {!! Form::open(['route' => 'academia.inscripcion.prueba', 'role' => 'form', 'id' => 'form-inscripcion']) !!}
 
                             {{csrf_field()}}
 
                             <div class="row setup-content" id="step-1">
 
-                                @include('adminlte::atleta.registro-ninos', ['tallas' => $tallas, 'preguntas' => $preguntas, 'datos_tarifas' => $datos_tarifas, 'servicio' => 'Academia', 'horarios' => $horarios, 'locaciones' => $locaciones, 'dias_de_clases' => $dias_de_clases, 'dias_semana_desc' => $dias_semana_desc])
+                                @include('adminlte::atleta.registro-ninos', ['tallas' => $tallas, 'preguntas' => $preguntas, 'datos_tarifas' => $datos_tarifas, 'servicio' => 'Academia', 'horarios' => $horarios, 'locaciones' => $locaciones, 'dias_de_clases' => $dias_de_clases, 'dias_semana_desc' => $dias_semana_desc, 'dias_deshabilitados' => $dias_deshabilitados])
 
                                 <div class="col-lg-12">
 
-                                    <button class="btn btn-danger btn-flat nextBtn btn-md pull-right" type="button" style="display: none;" id="button-datos-sig">Siguiente <i class="fa fa-angle-double-right"></i></button>
+                                    <!--<button class="btn btn-danger btn-flat nextBtn btn-md pull-right" type="button" style="display: none;" id="button-datos-sig">Siguiente <i class="fa fa-angle-double-right"></i></button>-->
+
+                                    <button class="btn btn-danger btn-md pull-right" type="submit" style="display: none;" id="button-datos-sig" onclick="deshabilitarclick(this)">Registrar</button>
 
                                 </div>
 

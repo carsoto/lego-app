@@ -881,43 +881,16 @@
 
 	                        	var cell0 = row.insertCell(0);
 
-	                        	cell0.innerHTML = '<input type="hidden" value="'+ atleta[i].id +'" name="atleta['+i+'][id]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].fecha_nacimiento +'" name="atleta['+i+'][fecha]" readonly="readonly" />' + moment(atleta[i].fecha_nacimiento).format('DD-MM-YYYY');
-
-	                        	
-
-	                        	var cell1 = row.insertCell(1);
-
-	                        	cell1.innerHTML = '<input type="hidden" value="'+ atleta[i].nombre +'" name="atleta['+i+'][nombre]" readonly="readonly" />' + atleta[i].nombre;
-
-	                        	
-
-	                        	var cell2 = row.insertCell(2);
-
-	                        	cell2.innerHTML = '<input type="hidden" value="'+ atleta[i].apellido +'" name="atleta['+i+'][apellido]" readonly="readonly" />' + atleta[i].apellido;
-
-	                        	
-
-	                        	var cell3 = row.insertCell(3);
-
-	                        	if((atleta[i].cedula != "") && (atleta[i].cedula != null)){
-
-	                        		cell3.innerHTML = '<input type="hidden" value="'+ atleta[i].cedula +'" name="atleta['+i+'][cedula]" readonly="readonly" />' + atleta[i].cedula;
-
-	                        	}else{
-
-	                        		cell3.innerHTML = '<input type="hidden" value="" name="atleta['+i+'][cedula]" readonly="readonly" /> -';
-
-	                        	}
+	                        	cell0.innerHTML = '<input type="hidden" value="'+ atleta[i].id +'" name="atleta['+i+'][id]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].fecha_nacimiento +'" name="atleta['+i+'][fecha]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].nombre +'" name="atleta['+i+'][nombre]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].apellido +'" name="atleta['+i+'][apellido]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].cedula +'" name="atleta['+i+'][cedula]" readonly="readonly" />' + atleta[i].nombre +' '+ atleta[i].apellido;
 
 
-
-	                        	var cell4 = row.insertCell(4);
+	                        	var cell2 = row.insertCell(1);
 
 								$.each(horarios, function(key, horario) {
 
 									$.each(horario, function(clave, h) {
 
-										cell4.innerHTML += '<input type="radio" name="atleta['+i+'][ubicacion]" class="atleta_ubicacion" value="'+ key +'" descripcion="' + clave + '"> ' + clave + '  ';
+										cell2.innerHTML += '<input type="radio" name="atleta['+i+'][ubicacion]" class="atleta_ubicacion" value="'+ key +'" descripcion="' + clave + '"> ' + clave + '  ';
 
 									});
 
@@ -925,23 +898,21 @@
 
 
 
-	                        	var cell5 = row.insertCell(5);
+	                        	var cell3 = row.insertCell(2);
 
 	                        	for (var d = 0; d < dias.length; d++) {
 
-									cell5.innerHTML += '<input type="checkbox" name="atleta['+i+'][horario][]" class="atleta_horario" value="'+dias[d]+'" style="padding-right: 10px;" descripcion="'+response.dias_semana_desc[dias[d]]+'"> '+ response.dias_semana_desc[dias[d]] + '  ';
+									cell3.innerHTML += '<input type="checkbox" name="atleta['+i+'][horario][]" class="atleta_horario" value="'+dias[d]+'" style="padding-right: 10px;" descripcion="'+response.dias_semana_desc[dias[d]]+'"> '+ response.dias_semana_desc[dias[d]] + '  ';
 
 								}
 
+								var cell1 = row.insertCell(3);
 
+	                        	cell1.innerHTML = '<label style="padding-right: 8px;"><input value="true" type="radio" name="atleta_check_uniforme"> Si</label><label><input value="false" type="radio" name="atleta_check_uniforme"> No</label><br><select class="form-control"><option value="1">1</option><option value="2">2</option></select><br><select class="form-control"><option value="1">1</option><option value="2">2</option></select>';
 
-								var cell6 = row.insertCell(6);
+								var cell4 = row.insertCell(4);
 
-								
-
-								cell6.innerHTML += "<button type='button' class='btn btn-sm btn-flat btn-success' onclick='incluir_atleta(this, " + i + ", "+ atleta[i].id +", \""+nombre_completo+"\", "+edad+", "+datos_tarifa+")'>Agregar</button>";
-
-
+								cell4.innerHTML += "<button type='button' class='btn btn-sm btn-flat btn-success' onclick='incluir_atleta(this, " + i + ", "+ atleta[i].id +", \""+nombre_completo+"\", "+edad+", "+datos_tarifa+")'>Agregar</button>";
 
 								$('input').iCheck({
 
@@ -952,8 +923,6 @@
 									increaseArea: '10%' // optional
 
 								});
-
-
 
 	                        	$('#lista-atletas-registrados tbody').append(row);
 
@@ -1757,10 +1726,10 @@
 		}
 
 
-
-		if(servicio == 'Prueba Academia'){
+		if(servicio == 'Academia'){
 
 			var f_prueba = document.getElementById('atleta_fecha_prueba').value;
+			var locacion = document.querySelector('input[name="locacion_prueba"]:checked');
 
 			if(f_prueba == ""){
 
@@ -1770,23 +1739,27 @@
 
 			}
 
-		}
+			if(locacion == null){
 
+				error_message += '<li>No ha seleccionado la ubicación de la academia</li>';
 
+				valido = false;
 
-		if(servicio == 'Academia'){
+			}
 
-			var text6 = document.getElementById('atleta_talla_top').value;
+			//var text6 = document.getElementById('atleta_talla_top').value;
+			var text6 = "";
 
-			var text7 = document.getElementById('atleta_talla_camiseta').value;
+			//var text7 = document.getElementById('atleta_talla_camiseta').value;
+			var text7 = "";
 
-			var locacion = document.querySelector('input[name="check_ubicacion_academia"]:checked');
+			//var locacion = document.querySelector('input[name="check_ubicacion_academia"]:checked');
 
-			var dias = document.querySelector('input[name="check_dias_horario[]"]:checked');
+			//var dias = document.querySelector('input[name="check_dias_horario[]"]:checked');
 
 			
 
-			if(locacion == null){
+			/*if(locacion == null){
 
 				error_message += '<li>No ha seleccionado la ubicación de la academia</li>';
 
@@ -1826,7 +1799,7 @@
 
 				}
 
-			}
+			}*/
 
 		}
 
@@ -1858,13 +1831,16 @@
 
 			if(servicio == 'Academia'){
 
-				cell1.innerHTML = '<input type="hidden" value="'+locacion.value+'" name="form_atleta['+ array_form +'][locacion_academia]" readonly="readonly" /><input type="hidden" value="'+horario_valores.join(',')+'" name="form_atleta['+ array_form +'][dias_horario]" readonly="readonly" /><input type="hidden" value="'+text10+'" name="form_atleta['+ array_form +'][telf_contacto]" readonly="readonly" /><input value="'+text1+'" type="text" name="form_atleta['+ array_form +'][fecha_nacimiento]" style="border: 0px solid;" readonly="readonly">';
+				/*cell1.innerHTML = '<input type="hidden" value="'+locacion.value+'" name="form_atleta['+ array_form +'][locacion_academia]" readonly="readonly" /><input type="hidden" value="'+horario_valores.join(',')+'" name="form_atleta['+ array_form +'][dias_horario]" readonly="readonly" /><input type="hidden" value="'+text10+'" name="form_atleta['+ array_form +'][telf_contacto]" readonly="readonly" /><input value="'+text1+'" type="text" name="form_atleta['+ array_form +'][fecha_nacimiento]" style="border: 0px solid;" readonly="readonly">';*/
+				
+				cell1.innerHTML = '<input type="hidden" value="'+f_prueba+'" name="form_atleta['+ array_form +'][fecha_prueba]" readonly="readonly" /><input type="hidden" value="'+locacion.value+'" name="form_atleta['+ array_form +'][locacion_prueba]" readonly="readonly" /><input value="'+text1+'" type="text" name="form_atleta['+ array_form +'][fecha_nacimiento]" style="border: 0px solid;" readonly="readonly">';
+
 
 				var hora = "";
 
 
 
-				var table_resume = document.getElementById("resumen-pago-academia");
+				/*var table_resume = document.getElementById("resumen-pago-academia");
 
 				var row_resume = table_resume.insertRow(0);
 
@@ -1984,7 +1960,7 @@
 
 					recalcularTarifaAcademia("resumen-pago-academia", dia_actual, 0, cantidad_alumnos);
 
-				}
+				}*/
 
 			}
 
