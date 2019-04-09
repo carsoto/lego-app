@@ -12,12 +12,17 @@
                 <div class="box box-danger">
                     <div class="box-body">
 
-                        <div class="text-center">
+                        <!--<div class="text-center">
                             <div class="text-center">
                                 <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
                                 <h3 style="font-family: Verdana;">¡Reserva nuestras canchas y ven a jugar con tus amigos!</h3>
                             </div>
-                        </div>
+                        </div>-->
+						
+						@section('title-content')
+							¡Reserva nuestras canchas y ven a jugar con tus amigos!
+						@endsection
+						@include('adminlte::layouts.principal')
 
                         {!! Form::open(['route' => 'alquiler.store', 'role' => 'form', 'id' => 'form-alquiler']) !!}
                             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">

@@ -13,8 +13,10 @@
             <div class="box box-danger">
                 <div class="box-body">
                     <div class="text-center">
-                        <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
-                        <h4 style="font-family: Verdana;">Te invitamos a recibir una clase totalmente <span class="label label-danger">GRATUITA</span> antes de inscribirte en nuestra ACADEMIA</h4>    
+                        @section('title-content')
+							Te invitamos a recibir una clase totalmente <span class="label label-danger">GRATUITA</span> antes de inscribirte en nuestra ACADEMIA
+						@endsection
+						@include('adminlte::layouts.principal')
                     </div>
                     <div class="text-center">
                         <!--<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="padding-bottom: 20px;"><a href="{{ route('academia.inscripcion_prueba') }}" class="btn btn-flat btn-success">Tomar clase de prueba</a></div>

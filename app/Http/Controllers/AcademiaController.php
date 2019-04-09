@@ -126,7 +126,7 @@ class AcademiaController extends Controller
 
         $datos_tarifas['edad_inicio'] = $configuraciones['Edad minima'];
 
-
+        $tallas = Funciones::tallas();
 
         $horarios_academia = array();
 
@@ -156,7 +156,7 @@ class AcademiaController extends Controller
 
 
 
-        return Response::json(array('status' => $status, 'msj' => $msj, 'atletas' => $atletas, 'representante' => $representante, 'horarios' => $horarios_academia, 'dias_de_clases' => $dias_de_clases, 'dias_semana_desc' => $dias_semana_desc, 'descuento' => $descuento, 'datos_tarifa' => json_encode($datos_tarifas)));
+        return Response::json(array('status' => $status, 'msj' => $msj, 'atletas' => $atletas, 'representante' => $representante, 'horarios' => $horarios_academia, 'dias_de_clases' => $dias_de_clases, 'dias_semana_desc' => $dias_semana_desc, 'descuento' => $descuento, 'datos_tarifa' => json_encode($datos_tarifas), 'tallas' => $tallas));
 
     }
 
@@ -184,8 +184,6 @@ class AcademiaController extends Controller
 
         $locaciones = array();
 
-
-
         foreach ($horarios as $key => $horario) {
 
             $datos_tarifas['horario'][$horario->academia_horario->edad_inicio] = array('edad_inicio' => $horario->academia_horario->edad_inicio, 'edad_fin' => $horario->academia_horario->edad_fin, 'hora' => $horario->academia_horario->hora_inicio.' - '.$horario->academia_horario->hora_fin);
@@ -193,8 +191,6 @@ class AcademiaController extends Controller
             $locaciones[$horario->locaciones_id] = $horario->locacion;
 
         }
-
-
 
         $datos_tarifas['edad_inicio'] = $configuraciones['Edad minima'];
 
@@ -804,7 +800,7 @@ class AcademiaController extends Controller
 
 
 
-        $atletas = Funciones::asistencia($modalidad, $mes, $anyo, $locacion, $horario);
+        $atletas = Funciones::asistencia($modalidad, $mes, $anyo, $locacion, $horario, $fecha_asistencia);
 
         $asistencia_registrada = AcademiaAsistencia::where('fecha', '=', $fecha_asistencia)->where('locaciones_id', '=', $locacion)->where('academia_horarios_id', '=', $horario)->where('modalidad', '=', $modalidad)->get();
 
@@ -892,11 +888,7 @@ class AcademiaController extends Controller
 
         }
 
-        
-
         $fecha = explode('-', $fecha_asistencia);
-
-
 
         $modalidad = $request->modalidad;
 
@@ -906,59 +898,58 @@ class AcademiaController extends Controller
 
         $asistencia = $request->asistencia;
 
-
-
         $asistencia_registrada = AcademiaAsistencia::where('fecha', '=', $fecha_asistencia)->where('locaciones_id', '=', $locacion)->where('academia_horarios_id', '=', $horario)->get();
-
-        //dd($asistencia, $asistencia_registrada);
-
 
 
         foreach ($asistencia_registrada as $key => $asistencia_r) {
 
-            if(!in_array($asistencia_r->atletas_id, $asistencia)){
+            if($asistencia != NULL){
+                if(!in_array($asistencia_r->atletas_id, $asistencia)){
 
+                    $item = AcademiaAsistencia::findOrFail($asistencia_r->id);
+
+                    $item->delete();
+
+                }    
+            }else{
                 $item = AcademiaAsistencia::findOrFail($asistencia_r->id);
-
                 $item->delete();
+            }
+            
+
+        }
+
+        if($asistencia != NULL){
+            for ($i=0; $i < count($asistencia); $i++) { 
+
+                AcademiaAsistencia::updateOrCreate([
+
+                    'atletas_id' => $asistencia[$i],
+
+                    'fecha' => $fecha_asistencia,
+
+                ], [
+
+                    'users_id' => Auth::id(),
+
+                    'atletas_id' => $asistencia[$i],
+
+                    'fecha' => $fecha_asistencia,
+
+                    'mes' => $fecha[1],
+
+                    'anyo' => $fecha[0],
+
+                    'locaciones_id' => $locacion,
+
+                    'academia_horarios_id' => $horario,
+
+                    'modalidad' => $modalidad
+
+                ]);
 
             }
-
         }
-
-
-
-        for ($i=0; $i < count($asistencia); $i++) { 
-
-            AcademiaAsistencia::updateOrCreate([
-
-                'atletas_id' => $asistencia[$i],
-
-                'fecha' => $fecha_asistencia,
-
-            ], [
-
-                'users_id' => Auth::id(),
-
-                'atletas_id' => $asistencia[$i],
-
-                'fecha' => $fecha_asistencia,
-
-                'mes' => $fecha[1],
-
-                'anyo' => $fecha[0],
-
-                'locaciones_id' => $locacion,
-
-                'academia_horarios_id' => $horario,
-
-                'modalidad' => $modalidad
-
-            ]);
-
-        }
-
-
 
         return redirect()->route('academia.dashboard');
 
@@ -1048,14 +1039,11 @@ class AcademiaController extends Controller
     public function update(Request $request)
 
     {
-
         try{
 
             $atletas_registrados = array();
 
             $uniformes = 0;
-
-
 
             if(isset($request->factura["tipo_pago"])){
 
@@ -1066,8 +1054,6 @@ class AcademiaController extends Controller
                 $tipo_pago = 'Efectivo';
 
             }
-
-
 
             $representante = Representante::updateOrCreate(['id' => $request->representante["id"]], [ 
 
@@ -1086,14 +1072,9 @@ class AcademiaController extends Controller
             ]);
 
 
-
             $cantidad_atletas = count($request->ins_atleta);
 
-
-
             $fecha_actual = date('Y-m-d');
-
-
 
             $factura = AcademiaFactura::create([
 
@@ -1114,10 +1095,21 @@ class AcademiaController extends Controller
             ]);
 
 
-
             foreach($request->ins_atleta AS $key => $atleta) { 
 
+                $reg_atleta = Atleta::where('id', $atleta["id"])->first();
+
+                $edad_atleta = Carbon::parse($reg_atleta["fecha_nacimiento"])->age;
+
+                if($atleta['uniforme'] == "true"){
+                    Atleta::where('id', $atleta["id"])->update(['talla_top' => $atleta["talla"], 'talla_camiseta' => $atleta["talla"]]);
+                    $uniformes = 1;
+                }else{
+                    Atleta::where('id', $atleta["id"])->update(['talla_top' => NULL, 'talla_camiseta' => NULL]);
+                }
                 
+                $a_locacion = Locacion::where('id', $atleta["locacion"])->first();
+                $a_horario = AcademiaHorario::where('id', $atleta["horario_id"])->first();
 
                 $inscripcion = InscripcionesAcademia::create([
 
@@ -1172,8 +1164,7 @@ class AcademiaController extends Controller
                 ]);
 
 
-
-                //$atletas_registrados[] = array('nombre' => $atleta["nombre"].' '.$atleta["apellido"], 'edad' => $edad_atleta, 'locacion' => $atleta["locacion_academia"], 'fecha_prueba' => $fecha_actual, 'horario' => $horario[0]->hora_inicio.' - '.$horario[0]->hora_fin);
+                $atletas_registrados[] = array('nombre' => $reg_atleta["nombre"].' '.$reg_atleta["apellido"], 'edad' => $edad_atleta, 'locacion' => $a_locacion->ubicacion, 'fecha_prueba' => date('d-m-Y'), 'horario' => $a_horario->hora_inicio.' - '.$a_horario->hora_fin);
 
             }
 

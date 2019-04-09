@@ -26,9 +26,14 @@
 
                         <div style="text-align: center;">
 
-                            <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
+                            <!--<img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
 
-                            <h3 style="font-family: Verdana;">¡Bienvenidos a nuestra ACADEMIA!</h3>    
+                            <h3 style="font-family: Verdana;">¡Bienvenidos a nuestra ACADEMIA!</h3>-->
+							
+							@section('title-content')
+								¡Bienvenidos a nuestra ACADEMIA!
+							@endsection
+							@include('adminlte::layouts.principal')
 
                         </div>
 
@@ -159,9 +164,7 @@
                                         <button class="btn btn-danger btn-flat btn-md" type="submit" onclick="deshabilitarclick(this)">Guardar</button>    
 
                                     </div>
-
                                     
-
                                 </div>
 
                             </div>

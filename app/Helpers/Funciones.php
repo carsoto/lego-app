@@ -195,7 +195,7 @@ class Funciones{
 
 
 
-    public static function asistencia($modalidad, $mes, $anyo, $locacion, $horario){
+    public static function asistencia($modalidad, $mes, $anyo, $locacion, $horario, $fecha){
 
 
 
@@ -211,7 +211,7 @@ class Funciones{
 
         }else{
 
-            $asistencia = DB::select(DB::raw("SELECT a.id, CONCAT(a.apellido, ', ', a.nombre) AS alumno, TIMESTAMPDIFF(YEAR, a.fecha_nacimiento, CURDATE()) AS edad, i.prueba_fecha, l.id AS locacion, ah.id AS horario FROM academia_horarios ah, inscripciones_academia i INNER JOIN atletas a ON i.atletas_id = a.id INNER JOIN representantes_atletas ra ON ra.atletas_id = a.id INNER JOIN representantes r ON ra.representantes_id = r.id INNER JOIN locaciones l ON l.id = i.locaciones_id WHERE i.prueba_fecha = CURDATE() AND ah.edad_inicio <= TIMESTAMPDIFF(YEAR, a.fecha_nacimiento, CURDATE()) AND l.id = ".$locacion." AND ah.id = ".$horario." AND ah.edad_fin >= TIMESTAMPDIFF(YEAR, a.fecha_nacimiento, CURDATE()) ORDER BY a.apellido ASC"));    
+            $asistencia = DB::select(DB::raw("SELECT a.id, CONCAT(a.apellido, ', ', a.nombre) AS alumno, TIMESTAMPDIFF(YEAR, a.fecha_nacimiento, CURDATE()) AS edad, i.prueba_fecha, l.id AS locacion, ah.id AS horario FROM academia_horarios ah, inscripciones_academia i INNER JOIN atletas a ON i.atletas_id = a.id INNER JOIN representantes_atletas ra ON ra.atletas_id = a.id INNER JOIN representantes r ON ra.representantes_id = r.id INNER JOIN locaciones l ON l.id = i.locaciones_id WHERE i.prueba_fecha = '".$fecha."' AND ah.edad_inicio <= TIMESTAMPDIFF(YEAR, a.fecha_nacimiento, CURDATE()) AND l.id = ".$locacion." AND ah.id = ".$horario." AND ah.edad_fin >= TIMESTAMPDIFF(YEAR, a.fecha_nacimiento, CURDATE()) ORDER BY a.apellido ASC"));    
 
         }
 

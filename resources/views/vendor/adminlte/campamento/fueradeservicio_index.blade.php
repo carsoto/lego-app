@@ -28,7 +28,7 @@
 
                     <div class="text-center">
 
-                        <div style="text-align: center;">
+                        <!--<div style="text-align: center;">
 
                             <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
 
@@ -36,7 +36,14 @@
 
                             <img src="{{ asset('public/images/en_construccion.png') }}">
 
-                        </div>
+                        </div>-->
+						@section('title-content')
+							¡LEGO BEACH VOLLEY!
+						@endsection
+						@include('adminlte::layouts.principal')
+						<div style="text-align: center;">
+							<img src="{{ asset('public/images/en_construccion.png') }}">
+						</div>
 
                     </div>
 

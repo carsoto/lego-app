@@ -11,11 +11,11 @@
             <div class="col-lg-10 col-lg-offset-1">
                 <div class="box box-danger">
                     <div class="box-body">
-                        <div style="text-align: center;">
-                            <!--<a href="{{ url('/home') }}">-->
-                                <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
-                            <!--</a>-->
-                            <h3 style="font-family: Verdana;">¡Te esperamos en LEGO!</h3>    
+                        <div style="text-align: center;"> 
+							@section('title-content')
+								¡Te esperamos en LEGO!
+							@endsection
+							@include('adminlte::layouts.principal')
                         </div>
                         @if($status)
                             @if(count($atletas_registrados) > 0)

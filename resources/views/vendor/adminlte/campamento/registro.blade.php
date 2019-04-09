@@ -11,12 +11,16 @@
             <div class="col-lg-10 col-lg-offset-1">
                 <div class="box box-danger">
                     <div class="box-body">
-                        <div style="text-align: center;">
+                        <!--<div style="text-align: center;">
                             <a href="{{ url('/home') }}">
                                 <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
                             </a>
                             <h3 style="font-family: Verdana;">¡Disfruta de nuestro campamento!</h3>    
-                        </div>
+                        </div>-->
+						@section('title-content')
+							¡Disfruta de nuestro campamento!
+						@endsection
+						@include('adminlte::layouts.principal')
                         <div class="stepwizard">
                             <div class="stepwizard-row setup-panel">
                                 <div class="stepwizard-step">

@@ -85,6 +85,11 @@
         });
 
 
+    	$("form").keypress(function(e) {
+	        if (e.which == 13) {
+	            return false;
+	        }
+	    });
 
     	var table_user = document.getElementById('tabla_usuarios');
 
@@ -801,8 +806,6 @@
 
 	            type: 'GET',
 
-	            
-
 	            success: function (response) {
 
 	            	$('#lista-atletas-registrados tbody tr:not(:first-child)').remove();
@@ -849,7 +852,11 @@
 
 						var datos_tarifa = response.datos_tarifa;
 
+						var opc_tallas = "";
 
+						$.each(response.tallas, function(key, talla) {
+							opc_tallas += '<option value="'+ key +'">'+ talla +'</option>';
+						});
 
 						document.getElementById('representante-id').value = representante.id;
 
@@ -906,9 +913,10 @@
 
 								}
 
+								
 								var cell1 = row.insertCell(3);
 
-	                        	cell1.innerHTML = '<label style="padding-right: 8px;"><input value="true" type="radio" name="atleta_check_uniforme"> Si</label><label><input value="false" type="radio" name="atleta_check_uniforme"> No</label><br><select class="form-control"><option value="1">1</option><option value="2">2</option></select><br><select class="form-control"><option value="1">1</option><option value="2">2</option></select>';
+	                        	cell1.innerHTML = '<label style="padding-right: 8px;"><input value=true type="radio" name="check_uniforme_reg"> Si</label><label><input value=false type="radio" name="check_uniforme_reg"> No</label><br><select name="talla_uniforme" class="form-control">'+ opc_tallas +'</select>';
 
 								var cell4 = row.insertCell(4);
 
@@ -954,6 +962,8 @@
 
     function incluir_atleta(obj, posicion, id, nombre, edad, datos_tarifa){
 
+    	
+
     	var horario_i = new Array();
 
     	var ubicaciones = $(obj).closest('tr').find('input[type=radio]');
@@ -970,7 +980,9 @@
 
 		var str_ubicacion = '';
 
-
+		var uniforme = $(obj).closest('tr').find('input[name=check_uniforme_reg]:checked')[0].value;
+		
+		var talla = $(obj).closest('tr').find('select[name="talla_uniforme"] option:selected').val();
 
 		$('input[name="atleta['+posicion+'][horario][]"]:checked').map(function(){
 
@@ -1016,6 +1028,11 @@
 
     	}
 
+    	if((uniforme == "true") && (talla == "0")){
+    		msj += "<li>Debe seleccionar la talla del uniforme</li>";
+
+    		errors = true;
+    	}
 
 
     	if(errors == true){
@@ -1064,7 +1081,7 @@
 
 						var cell_resume1 = row_resume.insertCell(0);
 
-						cell_resume1.innerHTML = "<input type='hidden' name='ins_atleta["+posicion+"][id]' value='"+ id +"' />" + nombre;
+						cell_resume1.innerHTML = "<input type='hidden' name='ins_atleta["+posicion+"][id]' value='"+ id +"' /><input type='hidden' name='ins_atleta["+posicion+"][uniforme]' value='"+ uniforme +"' /><input type='hidden' name='ins_atleta["+posicion+"][talla]' value='"+ talla +"' />" + nombre;
 
 
 
@@ -1619,7 +1636,7 @@
 
 					if((edad < datos_tarifa.edad_inicio) || (edad > datos_tarifa.edad_fin)){
 
-						error_message += '<li>El alumno no cumple con el requisito. Edad requerida: '+ datos_tarifa.edad_inicio +'-'+ datos_tarifa.edad_fin +' años.</li>';
+						error_message += '<li>El atleta no cumple con el requisito. Edad requerida: '+ datos_tarifa.edad_inicio +'-'+ datos_tarifa.edad_fin +' años.</li>';
 
 						valido = false;
 
@@ -1629,7 +1646,7 @@
 
 					if((edad < datos_tarifa.edad_inicio)){
 
-						error_message += '<li>El alumno no cumple con el requisito. Edad requerida: mayor o igual a '+ datos_tarifa.edad_inicio +' años.</li>';
+						error_message += '<li>El atleta no cumple con el requisito. Edad requerida: mayor o igual a '+ datos_tarifa.edad_inicio +' años.</li>';
 
 						valido = false;
 
@@ -1639,27 +1656,25 @@
 
 			}
 
-			else if(servicio == 'Prueba Academia'){
+			/*else if(servicio == 'Prueba Academia'){
 
 				if((edad < datos_tarifa.edad_inicio)){
 
-					error_message += '<li>El alumno no cumple con el requisito. Edad requerida: mayor o igual a '+ datos_tarifa.edad_inicio +' años.</li>';
+					error_message += '<li>El atleta no cumple con el requisito. Edad requerida: mayor o igual a '+ datos_tarifa.edad_inicio +' años.</li>';
 
 					valido = false;
 
 				}	
 
-			}
+			}*/
 
 			else if(servicio == 'Academia'){
-
-				
 
 				if(window.t_inscripcion == 1){
 
 					if((edad < 18)){
 
-						error_message += '<li>El alumno no cumple con el requisito. Edad requerida: mayor o igual a 18 años.</li>';
+						error_message += '<li>El atleta no cumple con el requisito. Edad requerida: mayor o igual a 18 años.</li>';
 
 						valido = false;
 
@@ -1669,7 +1684,7 @@
 
 					if((edad < datos_tarifa.edad_inicio)){
 
-						error_message += '<li>El alumno no cumple con el requisito. Edad requerida: mayor o igual a '+ datos_tarifa.edad_inicio +' años.</li>';
+						error_message += '<li>El atleta no cumple con el requisito. Edad requerida: mayor o igual a '+ datos_tarifa.edad_inicio +' años.</li>';
 
 						valido = false;
 
@@ -1685,7 +1700,15 @@
 
 		if(text2 == ""){
 
-			error_message += '<li>El nombre del alumno es obligatorio</li>';
+			error_message += '<li>El nombre del atleta es obligatorio</li>';
+
+			valido = false;
+
+		}
+
+		if((edad >= 18) && (text3 == "")){
+
+			error_message += '<li>La cédula del atleta es obligatoria</li>';
 
 			valido = false;
 
@@ -1719,7 +1742,7 @@
 
 		if(text9 == ""){
 
-			error_message += '<li>El apellido del alumno es obligatorio</li>';
+			error_message += '<li>El apellido del atleta es obligatorio</li>';
 
 			valido = false;
 
@@ -3189,7 +3212,8 @@
 	            		$("#tabla-asistencia tbody").html("");
 
 
-
+	            		console.log(atletas);
+	            		
 	            		$.each(atletas, function(id, info) {
 
 	            			var row = table.insertRow(0);
@@ -3198,21 +3222,17 @@
 
 							cell1.innerHTML = info.alumno;
 
-
-
 							var cell2 = row.insertCell(1);
 
-							if(inArray(id, response.asistencia_reg)){
+							if(inArray(info.id, response.asistencia_reg)){
 
-								cell2.innerHTML = '<input value="'+id+'" type="checkbox" name="asistencia[]" checked>';	
+								cell2.innerHTML = '<input value="'+info.id+'" type="checkbox" name="asistencia[]" checked>';	
 
 							}else{
 
-								cell2.innerHTML = '<input value="'+id+'" type="checkbox" name="asistencia[]">';	
+								cell2.innerHTML = '<input value="'+info.id+'" type="checkbox" name="asistencia[]">';	
 
 							}
-
-							
 
 							$('#tabla-asistencia tbody').append(row);
 

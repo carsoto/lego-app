@@ -78,13 +78,13 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
     <div class="col-md-4" style="margin-bottom: 20px;"><a href="{{ route('registro.atleta', array('tipo' => 'niños')) }}" target="_blank" class="btn btn-md btn-flat btn-info">REGISTRO PARA NIÑOS</a></div>
 
     <div class="col-md-4" style="margin-bottom: 20px;"><a href="{{ route('registro.atleta', array('tipo' => 'adultos')) }}" target="_blank" class="btn btn-md btn-flat btn-primary">REGISTRO PARA ADULTOS</a></div>-->
-
-    <div style="text-align: center;">
-
-        <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
-
-        <h3 style="font-family: Verdana;">¡Bienvenidos a nuestra academia!</h3>    
-        
+	
+	@section('title-content')
+		¡Bienvenidos a nuestra academia!
+	@endsection
+	@include('adminlte::layouts.principal')
+	
+    <div style="text-align: center;">        
         <a class="btn btn-info" href="{{ route('academia.index') }}">ACADEMIA</a>
         <a class="btn btn-warning" href="{{ route('alquiler.index') }}">ALQUILER</a>
         <a class="btn btn-danger" href="{{ route('torneo.index') }}">TORNEOS</a>

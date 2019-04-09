@@ -12,12 +12,17 @@
                 {!! Form::open(['route' => 'registro.store']) !!}
                     <div class="box box-danger">
                         <div class="box-body">
-                            <div style="text-align: center;">
+                            <!--<div style="text-align: center;">
                                 <a href="{{ url('/home') }}">
                                     <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
                                 </a>
-                                <h3 style="font-family: Verdana;">¡Sé parte de nuestra academia!</h3>    
-                            </div>
+                                <h3 style="font-family: Verdana;"></h3>    
+                            </div>-->
+							
+							@section('title-content')
+								¡Sé parte de nuestra academia!
+							@endsection
+							@include('adminlte::layouts.principal')
                             
                             @if (count($errors) > 0)
                                 <div class="alert alert-danger">

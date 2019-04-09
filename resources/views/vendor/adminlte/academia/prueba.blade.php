@@ -24,15 +24,18 @@
 
                     <div class="box-body">
 
-                        <div style="text-align: center;">
+                        <!--<div style="text-align: center;">
 
-                            <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
+                           <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
 
                             <h3 style="font-family: Verdana;">¡Inscríbete en tu primera clase es totalmente <span class="label label-success">GRATIS</span>!</h3>
+							
+                        </div>-->
 
-                        </div>
-
-                        
+                        @section('title-content')
+							¡Inscríbete en tu primera clase es totalmente <span class="label label-success">GRATIS</span>!
+						@endsection
+						@include('adminlte::layouts.principal')
 
                         {!! Form::open(['route' => 'academia.inscripcion.prueba', 'role' => 'form', 'id' => 'form-inscripcion']) !!}
 

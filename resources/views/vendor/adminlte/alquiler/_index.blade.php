@@ -12,11 +12,18 @@
                 <div class="box box-danger">
                     <div class="box-body">
                         <div class="text-center">
-                            <div style="text-align: center;">
+                            <!---<div style="text-align: center;">
                                 <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
                                 <h3 style="font-family: Verdana;">Â¡LEGO BEACH VOLLEY!</h3>
                                 <img src="{{ asset('public/images/en_construccion.png') }}">
-                            </div>
+                            </div>--->
+							@section('title-content')
+								¡Reserva nuestras canchas y ven a jugar con tus amigos!
+							@endsection
+							@include('adminlte::layouts.principal')
+							<div style="text-align: center;">
+								<img src="{{ asset('public/images/en_construccion.png') }}">
+							</div>
                         </div>
                     </div>
                 </div>
