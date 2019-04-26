@@ -82,4 +82,9 @@ class Locacion extends Eloquent
 	{
 		return $this->hasMany(\App\Vacacional::class, 'locaciones_id');
 	}
+
+	public function workshop()
+	{
+		return $this->hasMany(\App\Workshop::class, 'locaciones_id');
+	}
 }

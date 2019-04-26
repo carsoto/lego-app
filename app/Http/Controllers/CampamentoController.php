@@ -50,7 +50,7 @@ class CampamentoController extends Controller
 
         $locaciones = Locacion::where('activo', '=', 1)->get();
 
-        return view('adminlte::campamento.index', array('locaciones' => $locaciones));
+        return view('adminlte::campamento.index', array('locaciones' => $locaciones, 'servicio' => 'Alquiler'));
 
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAcademiaHorariosTable extends Migration
+class CreateWorkshopTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,21 @@ class CreateAcademiaHorariosTable extends Migration
      */
     public function up()
     {
-        Schema::create('academia_horarios', function (Blueprint $table) {
+        Schema::create('workshop', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->integer('locaciones_id')->unsigned();
-            $table->integer('edad_inicio')->nullable();
+            $table->string('descripcion');
+            $table->integer('edad_inicio');
             $table->integer('edad_fin')->nullable();
-            $table->string('hora_inicio');
-            $table->string('hora_fin');
+            $table->string('h_inicio')->nullable();
+            $table->string('h_fin')->nullable();
+            $table->integer('porcentaje_individual')->nullable();
+            $table->integer('porcentaje_grupal')->nullable();
+            $table->date('fecha_limite')->nullable();
             $table->integer('activo')->default(1);
+            $table->string('imagen')->nullable();
 
-            $table->index('locaciones_id','fk_locaciones_academia_horarios_idx');
+            $table->index('locaciones_id','fk_locaciones_workshop_idx');
         
             $table->foreign('locaciones_id')
                 ->references('id')->on('locaciones');
@@ -38,6 +43,6 @@ class CreateAcademiaHorariosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('academia_horarios');
+        Schema::dropIfExists('workshop');
     }
 }

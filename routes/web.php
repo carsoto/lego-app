@@ -24,13 +24,20 @@
 
 
 
-Route::get('/', function () {
+/*Route::get('/', function () {
 
     return view('welcome');
 
+});*/
+
+
+Route::get('/', 'HomeController@home')->name('home');
+
+Route::get('/admin', function () {
+
+    return view('adminlte::auth.login');
+
 });
-
-
 
 /*Route::get('/', function () {
 
@@ -38,7 +45,7 @@ Route::get('/', function () {
 
 });*/
 
-
+Route::get('validar/datos/{cedula}', 'AcademiaController@validardatos')->name('validar.datos.atletas');
 
 //Route::resource('academia', 'AcademiaController');
 
@@ -98,9 +105,9 @@ Route::group(['prefix' => 'campamento'], function () {
 
 });
 
+Route::resource('workshop', 'WorkshopController');
 
-
-Route::resource('torneo', 'TorneoController');
+Route::resource('campeonato', 'CampeonatoController');
 
 
 
@@ -159,7 +166,6 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('vacacional/deshabilitar/inscripcion/{id}', 'VacacionalController@deshabilitar_inscripcion')->name('vacacional.deshabilitar.inscripcion');
 
 
-
 		Route::get('alquiler/resumen', 'AlquilerController@dashboard')->name('alquiler.dashboard');
 
 		Route::get('alquiler/registrar/pago/{id}', 'AlquilerController@registrarpago')->name('alquiler.registrar.pago');
@@ -174,6 +180,13 @@ Route::group(['middleware' => 'auth'], function () {
 
 		Route::get('campamento/deshabilitar/inscripcion/{id}', 'CampamentoController@deshabilitar_inscripcion')->name('campamento.deshabilitar.inscripcion');
 
+
+		Route::get('workshop/resumen', 'WorkshopController@dashboard')->name('workshop.dashboard');
+
+		Route::get('workshop/deshabilitar/inscripcion/{id}', 'WorkshopController@deshabilitar_inscripcion')->name('workshop.deshabilitar.inscripcion');
+
+		Route::get('workshop/registrar/pago', 'WorkshopController@registrarpago')->name('workshop.deshabilitar.registrar.pago');
+		
 		
 
 	});

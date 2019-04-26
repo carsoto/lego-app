@@ -66,7 +66,7 @@ class AlquilerController extends Controller
 
 
 
-        return view('adminlte::alquiler.index', ['horas' => $horas, 'cantd_canchas' => $cantd_canchas, 'tarifa_standard_hora' => $tarifa_standard_hora, 'min_personas' => $min_personas, 'locaciones' => $locaciones]);
+        return view('adminlte::alquiler.index', ['horas' => $horas, 'cantd_canchas' => $cantd_canchas, 'tarifa_standard_hora' => $tarifa_standard_hora, 'min_personas' => $min_personas, 'locaciones' => $locaciones, 'servicio' => 'Alquiler']);
 
     }
 

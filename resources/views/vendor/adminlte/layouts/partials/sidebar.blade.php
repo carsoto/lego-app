@@ -56,6 +56,7 @@
                 <li><a href="{{ route('alquiler.dashboard') }}"><span>Alquileres</span></a></li>
                 <li><a href="{{ route('vacacional.dashboard') }}"><span>Vacacional</span></a></li>
                 <li><a href="{{ route('campamento.dashboard') }}"><span>Campamento</span></a></li>
+                <li><a href="{{ route('workshop.dashboard') }}"><span>Workshop</span></a></li>
 
                 <li><a href="{{ route('usuarios.index') }}"><i class='fa fa-user'></i><span>Usuarios</span></a></li>
             @elseif(Auth::user()->hasRole('profesor'))

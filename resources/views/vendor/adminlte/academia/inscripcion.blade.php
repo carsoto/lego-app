@@ -31,7 +31,7 @@
                             <h3 style="font-family: Verdana;">¡Bienvenidos a nuestra ACADEMIA!</h3> -->
 
 							@section('title-content')
-								¡Bienvenidos a nuestra ACADEMIA!
+								Bienvenidos a nuestra ACADEMIA
 							@endsection
 							@include('adminlte::layouts.principal')
 

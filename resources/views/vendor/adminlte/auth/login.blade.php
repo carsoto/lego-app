@@ -8,10 +8,11 @@
 <body class="hold-transition login-page">
     <div id="app">
         <div class="login-box">
-            <div class="login-logo">
+            <!--<div class="login-logo">
                 <a href="{{ url('/home') }}">{{ env('APP_NAME') }}</a>
             </div><!-- /.login-logo -->
 
+            @include('adminlte::layouts.principal')
         @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <strong>Whoops!</strong> {{ trans('adminlte_lang::message.someproblems') }}<br><br>

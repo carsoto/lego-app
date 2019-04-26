@@ -72,7 +72,9 @@ class AcademiaController extends Controller
 
         $tipos_pago = Funciones::tipos_pago();
 
-        return view('adminlte::academia.miembro', array('tipos_pago' => $tipos_pago));
+        $datos_tarifas = array();
+        
+        return view('adminlte::academia.miembro', array('tipos_pago' => $tipos_pago, 'servicio' => 'Academia', 'datos_tarifas' => $datos_tarifas));
 
     }
 
@@ -85,8 +87,6 @@ class AcademiaController extends Controller
         $atletas = array();
 
         $msj = "";
-
-
 
         if(count($representante) == 0){
 
@@ -103,7 +103,6 @@ class AcademiaController extends Controller
             $status = "success";
 
         }
-
 
 
         $horarios_academia = array();
@@ -130,8 +129,6 @@ class AcademiaController extends Controller
 
         $horarios_academia = array();
 
-
-
         $dias_semana_desc = Funciones::descripcion_semana();
 
         $datos_tarifas['edades'] = array();
@@ -142,8 +139,6 @@ class AcademiaController extends Controller
 
         $datos_tarifas['clase_diaria'] = $configuraciones['Clase por dia'];
 
-        
-
         foreach ($horarios as $key => $horario) {
 
             $datos_tarifas['edades'][$horario->academia_horario->edad_inicio.'_'.$horario->academia_horario->edad_fin] = "";
@@ -153,8 +148,6 @@ class AcademiaController extends Controller
             $horarios_academia[$horario->locaciones_id][$horario->locacion->ubicacion][$horario->academia_horario->edad_inicio.'_'.$horario->academia_horario->edad_fin] = array('edad_inicio' => $horario->academia_horario->edad_inicio, 'edad_fin' => $horario->academia_horario->edad_fin, 'hora' => $horario->academia_horario->hora_inicio.' - '.$horario->academia_horario->hora_fin, 'tarifas' => $tarifas[$horario->locaciones_id][$horario->academia_horario->edad_inicio.'_'.$horario->academia_horario->edad_fin]);
 
         }
-
-
 
         return Response::json(array('status' => $status, 'msj' => $msj, 'atletas' => $atletas, 'representante' => $representante, 'horarios' => $horarios_academia, 'dias_de_clases' => $dias_de_clases, 'dias_semana_desc' => $dias_semana_desc, 'descuento' => $descuento, 'datos_tarifa' => json_encode($datos_tarifas), 'tallas' => $tallas));
 
@@ -194,7 +187,7 @@ class AcademiaController extends Controller
 
         $datos_tarifas['edad_inicio'] = $configuraciones['Edad minima'];
 
-        return view('adminlte::academia.prueba', array('locaciones' => $locaciones, 'tallas' => $tallas, 'preguntas' => $preguntas, 'datos_tarifas' => $datos_tarifas, 'dias_deshabilitados' => $deshabilitar_dias));
+        return view('adminlte::academia.prueba', array('locaciones' => $locaciones, 'tallas' => $tallas, 'preguntas' => $preguntas, 'datos_tarifas' => $datos_tarifas, 'dias_deshabilitados' => $deshabilitar_dias, 'servicio' => 'Prueba'));
 
     }
 
@@ -256,7 +249,7 @@ class AcademiaController extends Controller
 
         }
 
-        return view('adminlte::academia.inscripcion', array('locaciones' => $locaciones, 'tallas' => $tallas, 'preguntas' => $preguntas, 'datos_tarifas' => $datos_tarifas, 'horarios' => $horarios_academia, 'dias_de_clases' => $dias_de_clases, 'dias_semana_desc' => $dias_semana_desc, 'tipos_pago' => $tipos_pago, 'dias_deshabilitados' => $deshabilitar_dias));
+        return view('adminlte::academia.inscripcion', array('locaciones' => $locaciones, 'tallas' => $tallas, 'preguntas' => $preguntas, 'datos_tarifas' => $datos_tarifas, 'horarios' => $horarios_academia, 'dias_de_clases' => $dias_de_clases, 'dias_semana_desc' => $dias_semana_desc, 'tipos_pago' => $tipos_pago, 'dias_deshabilitados' => $deshabilitar_dias, 'servicio' => 'Academia'));
 
     }
 

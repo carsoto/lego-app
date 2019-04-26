@@ -18,8 +18,6 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
 
     <meta name="author" content="Carmen María Soto">
 
-
-
     <meta property="og:title" content="LEO" />
 
     <meta property="og:type" content="website" />
@@ -34,21 +32,15 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
 
     <meta property="og:url" content="http://legovolley.com/app/" />
 
-
-
     <meta name="twitter:card" content="summary_large_image" />
 
     <meta name="twitter:site" content="@CarmenSotoO" />
 
     <meta name="twitter:creator" content="@CarmenSotoO" />
 
-
-
     <title>LEGO - academia de beach volley</title>
 
     <title>{{ env('APP_NAME') }}</title>
-
-
 
     <!-- Custom styles for this template -->
 
@@ -62,38 +54,29 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
 
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
 
-
-
 </head>
-
-
 
 <body data-spy="scroll" data-offset="0" data-target="#navigation">
 
-
-
 <div id="app">
-
-    <!--<div class="col-md-4" style="margin-bottom: 20px;"><a href="" class="btn btn-success">INICIAR SESIÓN</a></div>
-
-    <div class="col-md-4" style="margin-bottom: 20px;"><a href="{{ route('registro.index') }}" class="btn btn-primary">REGISTRO</a></div>
-
-    <div class="col-md-4" style="margin-bottom: 20px;"><a href="{{ route('registro.atleta', array('tipo' => 'niños')) }}" target="_blank" class="btn btn-md btn-flat btn-info">REGISTRO PARA NIÑOS</a></div>
-
-    <div class="col-md-4" style="margin-bottom: 20px;"><a href="{{ route('registro.atleta', array('tipo' => 'adultos')) }}" target="_blank" class="btn btn-md btn-flat btn-primary">REGISTRO PARA ADULTOS</a></div>-->
 
 	@section('title-content')
 		¡Bienvenidos a nuestra academia!
 	@endsection
+
 	@include('adminlte::layouts.principal')
    
     <div style="text-align: center;">    
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-bottom: 10px;"><a class="btn btn-flat btn-block btn-info" href="{{ route('academia.index') }}">ACADEMIA</a></div>
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-bottom: 10px;"><a class="btn btn-flat btn-block btn-warning" href="{{ route('alquiler.index') }}">ALQUILER</a></div>
-        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-bottom: 10px;"><a class="btn btn-flat btn-block btn-success" href="{{ route('torneo.index') }}">TORNEOS</a></div>
-        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-bottom: 10px;"><a class="btn btn-flat btn-block btn-primary" href="{{ route('campamento.index') }}">CAMPAMENTOS</a></div>
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-bottom: 10px;"><a class="btn btn-flat btn-block btn-success" href="{{ route('campeonato.index') }}">CAMPEONATO</a></div>
+        @if($campamentos)
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-bottom: 10px;"><a class="btn btn-flat btn-block btn-primary" href="{{ route('campamento.index') }}">CAMPAMENTOS</a></div>
+        @else
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-bottom: 10px;"><a class="btn btn-flat btn-block btn-primary" href="{{ route('workshop.index') }}">WORKSHOP</a></div>
+        @endif
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-bottom: 10px;"><a class="btn btn-flat btn-block btn-danger" href="{{ route('vacacional.index') }}">VACACIONALES</a></div>
-        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-bottom: 10px;"><a class="btn btn-flat btn-block bg-purple" href="{{ route('torneo.index') }}">UNIFORMES</a></div>
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-bottom: 10px;"><a class="btn btn-flat btn-block bg-purple" href="{{ route('campeonato.index') }}">UNIFORMES</a></div>
     </div>
 </div>
 

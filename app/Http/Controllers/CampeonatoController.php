@@ -8,7 +8,7 @@ use App\Locacion;
 
 
 
-class TorneoController extends Controller
+class CampeonatoController extends Controller
 
 {
 
@@ -28,10 +28,9 @@ class TorneoController extends Controller
 
         /*$locaciones = Locacion::where('activo', '=', 1)->get();
 
-        return view('adminlte::torneo.index', array('locaciones' => $locaciones));*/
+        return view('adminlte::campeonato.index', array('locaciones' => $locaciones));*/
 
-        return view('adminlte::torneo.index');
-
+        return view('adminlte::campeonato.index');
     }
 
 

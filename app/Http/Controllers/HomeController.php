@@ -15,7 +15,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 
 use Illuminate\Http\Request;
-
+use App\Locacion;
 
 
 /**
@@ -40,13 +40,13 @@ class HomeController extends Controller
 
      */
 
-    public function __construct()
+    /*public function __construct()
 
     {
 
         $this->middleware('auth');
 
-    }
+    }*/
 
 
 
@@ -69,6 +69,18 @@ class HomeController extends Controller
     }*/
 
 
+    public function home(){
+        $locaciones = Locacion::where('activo', '=', 1)->get();
+
+        foreach($locaciones AS $key => $locacion){
+            if($locacion->campamentos()->where('activo', '=', 1)->count() == 0){
+                $campamentos = 0;
+            }else{
+                $campamentos = 1;
+            }
+        }
+        return view('welcome', array('campamentos' => $campamentos));
+    }
 
     public function index(Request $request)
 

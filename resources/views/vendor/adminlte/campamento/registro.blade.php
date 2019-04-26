@@ -11,16 +11,11 @@
             <div class="col-lg-10 col-lg-offset-1">
                 <div class="box box-danger">
                     <div class="box-body">
-                        <!--<div style="text-align: center;">
-                            <a href="{{ url('/home') }}">
-                                <img src="{{ asset('public/images/logo-lego.png') }}" width="180px">
-                            </a>
-                            <h3 style="font-family: Verdana;">¡Disfruta de nuestro campamento!</h3>    
-                        </div>-->
 						@section('title-content')
 							¡Disfruta de nuestro campamento!
 						@endsection
 						@include('adminlte::layouts.principal')
+                        
                         <div class="stepwizard">
                             <div class="stepwizard-row setup-panel">
                                 <div class="stepwizard-step">
@@ -31,12 +26,9 @@
                                     <a href="#step-2" type="button" class="btn nextBtn btn-default btn-circle" disabled="disabled">2</a>
                                     <p>Finalizar</p>
                                 </div>
-                                <!--<div class="stepwizard-step">
-                                    <a href="#step-3" type="button" class="btn btn-default btn-circle" disabled="disabled">3</a>
-                                    <p>Inscripción</p>
-                                </div>-->
                             </div>
                         </div>
+                        
                         {!! Form::open(['route' => 'campamento.store', 'role' => 'form', 'id' => 'form-inscripcion']) !!}
                             <div class="row setup-content" id="step-1">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

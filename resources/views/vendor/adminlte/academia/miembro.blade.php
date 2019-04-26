@@ -71,31 +71,9 @@
 
                             <div class="row setup-content" id="step-1">
 
-
-
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-                                    {!! Form::label('cedula', 'Cedula') !!}<strong><span style='color: red;'>*</span></strong>
-
-                                    {!! Form::text('cedula', null, array('class' => 'form-control input-sm', 'id' => 'cedula_rep_registrado')) !!}
-
-                                </div>
-
-
-
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="padding-top: 4px;">
-
-                                    <br>
-
-                                    <button class="btn btn-sm btn-flat btn-block btn-danger" type="button" onclick="buscarRegistros();"><i class="fa fa-refresh"></i> CARGAR DATOS</button>
-
-                                </div>
-
-
-
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px;">
 
-                                    @include("adminlte::representante.form")    
+                                    @include("adminlte::representante.form", array('servicio' => $servicio, 'datos_tarifas' => $datos_tarifas))    
 
                                 </div>
 

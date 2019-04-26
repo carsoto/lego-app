@@ -56,8 +56,6 @@ class VacacionalController extends Controller
 
         $datos_tarifas = array();
 
-
-
         foreach($locaciones AS $key => $locacion){
 
             if(count($locacion->vacacional()->where('activo', '=', 1)->get()) > 0){
@@ -86,7 +84,7 @@ class VacacionalController extends Controller
 
         }
 
-        return view('adminlte::vacacional.index', array('locaciones' => $locaciones, 'tallas' => $tallas, 'preguntas' => $preguntas, 'datos_tarifas' => $datos_tarifas));
+        return view('adminlte::vacacional.index', array('locaciones' => $locaciones, 'tallas' => $tallas, 'preguntas' => $preguntas, 'datos_tarifas' => $datos_tarifas, 'servicio' => 'Vacacional'));
 
     }
 

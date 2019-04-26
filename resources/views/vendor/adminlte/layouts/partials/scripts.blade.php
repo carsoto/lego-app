@@ -1,66 +1,17 @@
 <!-- REQUIRED JS SCRIPTS -->
-
-
-
 <!-- JQuery and bootstrap are required by Laravel 5.3 in resources/assets/js/bootstrap.js-->
-
-
-
 <!-- Laravel App -->
-
-
-
 <script src="{{ asset('/public/js/app.js') }}" type="text/javascript"></script>
-
-
-
 <script src="{{ asset('/public/plugins/datatables/jquery.dataTables.min.js') }}" type="text/javascript"></script>
-
-
-
 <script src="{{ asset('/public/plugins/datatables/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
-
-
-
 <script src="{{ asset('/public/plugins/sweetalert/sweetalert2.all.js') }}" type="text/javascript"></script>
-
-
-
 <script src="{{ asset('/public/js/moment.min.js') }}" type="text/javascript"></script>
-
-
-
 <script src="{{ asset('/public/plugins/datepicker/bootstrap-datepicker.js') }}" type="text/javascript"></script>
-
-
-
 <script src="{{ asset('/public/plugins/datepicker/locales/bootstrap-datepicker.es.js') }}" type="text/javascript"></script>
-
-
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
-
-
-
-
 <script>
-
-
-
-    window.Laravel = {!! json_encode([
-
-
-
-        'csrfToken' => csrf_token(),
-
-
-
-    ]) !!};
-
-
-
-
+    window.Laravel = {!! json_encode(['csrfToken' => csrf_token(),]) !!};
 
     (function($) {
 
@@ -483,63 +434,32 @@
 
         });
 
-
-
 		var navListItems = $('div.setup-panel div a'), allWells = $('.setup-content'), allNextBtn = $('.nextBtn');
-
-
 
 		allWells.hide();
 
-
-
 		navListItems.click(function (e) {
-
-
 
 	        e.preventDefault();
 
-
-
 	        var $target = $($(this).attr('href')),
-
-
 
 	        	$item = $(this);
 
-
-
 	        if (!$item.hasClass('disabled')) {
-
-
 
 	            navListItems.removeClass('btn-danger').addClass('btn-default');
 
-
-
 	            $item.addClass('btn-danger');
-
-
 
 	            allWells.hide();
 
-
-
 	            $target.show();
-
-
 
 	            $target.find('input:eq(0)').focus();
 
-
-
 	        }
-
-
-
 	    });
-
-
 
 	    allNextBtn.click(function(){
 
@@ -600,99 +520,49 @@
 
 
 	            nextStepWizard.removeAttr('disabled').trigger('click');
-
-
-
 	    });
-
 
 
     	$('div.setup-panel div a.btn-danger').trigger('click');
 
-
-
 		$('input[name="check_horario"]').on('ifChecked', function() {
-
-
-
 			var tarifa = $(this).attr('tarifa');
-
-
 
 			var cantd_alumnos = $('#resumen_cantd_alumnos').text();
 
-
-
 			var v_descuento = $('#descuento_aplicado').text();
-
-
 
 			var subtotal = cantd_alumnos * tarifa;
 
-
-
 			var descuento = 0;
-
-
 
 			var total = parseInt(subtotal, 10);
 
-
-
 			if((v_descuento != "") && (v_descuento != 'null')){
-
-
 
 				descuento = (parseInt(subtotal, 10) * parseInt(v_descuento, 10))/100;
 
-
-
 				total = parseInt(subtotal, 10) - parseInt(descuento, 10);
-
-
-
 			}
-
-
 
 			document.getElementById('pago_tarifa').value = parseInt(tarifa, 10);
 
-
-
 			document.getElementById('pago_descuento').value = descuento;
-
-
 
 			document.getElementById('pago_monto').value = total;
 
-
-
 			document.getElementById('resumen_pago').style.display = "block";
-
-
 
 			document.getElementById('resumen_horario').innerHTML = $(this).attr('descripcion');
 
-
-
 			document.getElementById('resumen_tarifa').innerHTML = '$ ' + parseInt(tarifa, 10).toFixed(2);
-
-
 
 			document.getElementById('resumen_subtotal').innerHTML = '$ ' + parseInt(subtotal, 10).toFixed(2);
 
-
-
 			document.getElementById('resumen_descuento').innerHTML = '$ ' + descuento.toFixed(2);
 
-
-
 			document.getElementById('resumen_total').innerHTML = '$ ' + total.toFixed(2);
-
-
-
 		});
-
 
 
 		$('input[name="check_ubicacion_vacacional"]').on('ifChecked', function() {
@@ -755,8 +625,6 @@
 
 		});
 
-
-
     })(jQuery);
 
 
@@ -766,35 +634,13 @@
     	button_c.value='.:: Guardando información ::.';
     }
 
-    /*function validarDatosRepresentante(){
-
-		console.log(document.getElementById('representante-cedula');
-
-		console.log(document.getElementById('representante-nombre');
-
-		console.log(document.getElementById('representante-apellido');
-
-		console.log(document.getElementById('representante-telefono');
-
-		console.log(document.getElementById('representante-email');
-
-		console.log(document.getElementById('representante-red-social');
-
-    }*/
-
-
-
     //á é í ó ú
-
-    function buscarRegistros(){
-
+    function buscarRegistros(servicio, datos_tarifas){
     	var result = document.getElementById('cedula_rep_registrado');
 
     	if ((result.value == "") || (!/^([0-9])*$/.test(result.value))){
 
 			swal("Ocurrió un error!", "La cédula <strong>" + result.value + "</strong> no es un número", "error");
-
-
 
 		}else{
 
@@ -822,15 +668,11 @@
 
 					document.getElementById('representante-red-social').value = "";
 
-
-
 	            	if(response.status == 'error'){
 
 						swal("Ocurrió un error!", response.msj, response.status);
 
 	            	}
-
-
 
 	            	else{
 
@@ -843,20 +685,6 @@
 						var row = "";
 
 						var count = $('#lista-atletas-registrados tbody').children().length;
-
-						var dias = response.dias_de_clases;
-
-						var horarios = response.horarios;
-
-						var date = new Date();
-
-						var datos_tarifa = response.datos_tarifa;
-
-						var opc_tallas = "";
-
-						$.each(response.tallas, function(key, talla) {
-							opc_tallas += '<option value="'+ key +'">'+ talla +'</option>';
-						});
 
 						document.getElementById('representante-id').value = representante.id;
 
@@ -873,78 +701,139 @@
 						document.getElementById('representante-red-social').value = representante.red_social;
 
 
+						if(servicio == 'Academia'){
+							var dias = response.dias_de_clases;
 
-						if(count == 1){
+							var horarios = response.horarios;
 
-							for (var i = 0; i < atleta.length; i++) {
+							var date = new Date();
 
-								var edad = calcularEdad(atleta[i].fecha_nacimiento);
+							var datos_tarifa = response.datos_tarifa;
 
-	                        	row = table.insertRow(i);
+							var opc_tallas = "";
 
-	                        	var nombre_completo = atleta[i].apellido+', '+atleta[i].nombre;
+							$.each(response.tallas, function(key, talla) {
+								opc_tallas += '<option value="'+ key +'">'+ talla +'</option>';
+							});
+
+							if(count == 1){
+
+								for (var i = 0; i < atleta.length; i++) {
+
+									var edad = calcularEdad(atleta[i].fecha_nacimiento);
+
+		                        	row = table.insertRow(i);
+
+		                        	var nombre_completo = atleta[i].apellido+', '+atleta[i].nombre;
 
 
+		                        	var cell0 = row.insertCell(0);
 
-	                        	var cell0 = row.insertCell(0);
-
-	                        	cell0.innerHTML = '<input type="hidden" value="'+ atleta[i].id +'" name="atleta['+i+'][id]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].fecha_nacimiento +'" name="atleta['+i+'][fecha]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].nombre +'" name="atleta['+i+'][nombre]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].apellido +'" name="atleta['+i+'][apellido]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].cedula +'" name="atleta['+i+'][cedula]" readonly="readonly" />' + atleta[i].nombre +' '+ atleta[i].apellido;
+		                        	cell0.innerHTML = '<input type="hidden" value="'+ atleta[i].id +'" name="atleta['+i+'][id]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].fecha_nacimiento +'" name="atleta['+i+'][fecha]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].nombre +'" name="atleta['+i+'][nombre]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].apellido +'" name="atleta['+i+'][apellido]" readonly="readonly" /><input type="hidden" value="'+ atleta[i].cedula +'" name="atleta['+i+'][cedula]" readonly="readonly" />' + atleta[i].nombre +' '+ atleta[i].apellido;
 
 
-	                        	var cell2 = row.insertCell(1);
+		                        	var cell2 = row.insertCell(1);
 
-								$.each(horarios, function(key, horario) {
+									$.each(horarios, function(key, horario) {
 
-									$.each(horario, function(clave, h) {
+										$.each(horario, function(clave, h) {
 
-										cell2.innerHTML += '<input type="radio" name="atleta['+i+'][ubicacion]" class="atleta_ubicacion" value="'+ key +'" descripcion="' + clave + '"> ' + clave + '  ';
+											cell2.innerHTML += '<input type="radio" name="atleta['+i+'][ubicacion]" class="atleta_ubicacion" value="'+ key +'" descripcion="' + clave + '"> ' + clave + '  ';
+
+										});
 
 									});
 
-								});
 
 
+		                        	var cell3 = row.insertCell(2);
 
-	                        	var cell3 = row.insertCell(2);
+		                        	for (var d = 0; d < dias.length; d++) {
 
-	                        	for (var d = 0; d < dias.length; d++) {
+										cell3.innerHTML += '<input type="checkbox" name="atleta['+i+'][horario][]" class="atleta_horario" value="'+dias[d]+'" style="padding-right: 10px;" descripcion="'+response.dias_semana_desc[dias[d]]+'"> '+ response.dias_semana_desc[dias[d]] + '  ';
 
-									cell3.innerHTML += '<input type="checkbox" name="atleta['+i+'][horario][]" class="atleta_horario" value="'+dias[d]+'" style="padding-right: 10px;" descripcion="'+response.dias_semana_desc[dias[d]]+'"> '+ response.dias_semana_desc[dias[d]] + '  ';
+									}
 
-								}
+									
+									var cell1 = row.insertCell(3);
 
-								
-								var cell1 = row.insertCell(3);
+		                        	cell1.innerHTML = '<label style="padding-right: 8px;"><input value=true type="radio" name="check_uniforme_reg"> Si</label><label><input value=false type="radio" name="check_uniforme_reg"> No</label><br><select name="talla_uniforme" class="form-control">'+ opc_tallas +'</select>';
 
-	                        	cell1.innerHTML = '<label style="padding-right: 8px;"><input value=true type="radio" name="check_uniforme_reg"> Si</label><label><input value=false type="radio" name="check_uniforme_reg"> No</label><br><select name="talla_uniforme" class="form-control">'+ opc_tallas +'</select>';
+									var cell4 = row.insertCell(4);
 
-								var cell4 = row.insertCell(4);
+									cell4.innerHTML += "<button type='button' class='btn btn-sm btn-flat btn-success' onclick='incluir_atleta(this, " + i + ", "+ atleta[i].id +", \""+nombre_completo+"\", "+edad+", "+datos_tarifa+")'>Agregar</button>";
 
-								cell4.innerHTML += "<button type='button' class='btn btn-sm btn-flat btn-success' onclick='incluir_atleta(this, " + i + ", "+ atleta[i].id +", \""+nombre_completo+"\", "+edad+", "+datos_tarifa+")'>Agregar</button>";
+									$('input').iCheck({
 
-								$('input').iCheck({
+										checkboxClass: 'icheckbox_square-red',
 
-									checkboxClass: 'icheckbox_square-red',
+										radioClass: 'iradio_square-red',
 
-									radioClass: 'iradio_square-red',
+										increaseArea: '10%' // optional
 
-									increaseArea: '10%' // optional
+									});
 
-								});
+		                        	$('#lista-atletas-registrados tbody').append(row);
 
-	                        	$('#lista-atletas-registrados tbody').append(row);
+		                        	document.getElementById('button-datos-sig').style.display = 'block';
+		                        }	
+							}
+						
+						}else if(servicio == 'Workshop'){
+							
+							document.getElementById('div-lista-atletas-registrados').style.display = 'block';
 
-	                        	document.getElementById('button-datos-sig').style.display = 'block';
+							var cantidad_alumnos = $('#lista-atletas tbody').children().length;
+							var cabecera = 1;
+							var array_form = 0;
+							var valido = true;
+							var table = document.getElementById("lista-atletas");
+							var datos_tarifa = datos_tarifas;
+							var f_actual = new Date();
+    						var dia_actual = f_actual.getDay();
+    						var nombre_completo = "";
 
-	                        }	
+							if(atleta.length > 0){
+								for (var i = 0; i < atleta.length; i++) {
+									array_form = i;
+		                        	var edad = calcularEdad(atleta[i].fecha_nacimiento);
 
-						}
+									if((edad >= datos_tarifa.edad_inicio) && (edad <= datos_tarifa.edad_fin)){
+			                        	var row = table.insertRow(i);
+			                        	nombre_completo = atleta[i].nombre +' '+ atleta[i].apellido;
+			                        	
+			                        	var cell0 = row.insertCell(0);
+			                        	cell0.innerHTML = '<input type="hidden" value="'+ atleta[i].id +'" name="form_atleta['+array_form+'][id]" readonly="readonly" />'+moment(atleta[i].fecha_nacimiento).format('YYYY-MM-DD');
 
+			                        	var cell1 = row.insertCell(1);
+			                        	cell1.innerHTML = atleta[i].nombre;
+
+			                        	var cell2 = row.insertCell(2);
+			                        	cell2.innerHTML = atleta[i].apellido;
+
+			                        	var cell3 = row.insertCell(3);
+			                        	cell3.innerHTML = atleta[i].cedula;
+
+			                        	var cell4 = row.insertCell(4);
+			                        	cell4.innerHTML = atleta[i].instituto;
+
+			                        	var cell5 = row.insertCell(5);
+			                        	var a = { id: atleta[i].id, nombre_completo: nombre_completo };
+			                        	//cell5.innerHTML = '<a href="#" name="add" onclick="pago_workshop(this, \''+JSON.stringify(atleta[i])+'\', \''+dia_actual+'\', \''+datos_tarifa.fecha_limite+'\', \''+datos_tarifa.porc_individual+'\', \''+datos_tarifa.porc_grupal+'\', \''+datos_tarifa.descuento+'\')" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i> Inscribir al workshop</a>';			                        	console.log();
+			                        	cell5.innerHTML = "<a href='#' name='add' onclick='pago_workshop(this, "+JSON.stringify(a)+", \""+dia_actual+"\", \""+datos_tarifa.fecha_limite+"\", \""+datos_tarifa.porc_individual+"\", \""+datos_tarifa.porc_grupal+"\", \""+datos_tarifa.descuento+"\", \""+datos_tarifa.tarifa+"\")' class='btn btn-sm btn-flat btn-primary'><i class='fa fa-plus'></i> Inscribir al workshop</a>";
+
+			                        	$('#lista-atletas tbody').append(row);
+		                        	}
+		                        }
+		                        recalcularTarifaAcademia("resumen-pago-academia", dia_actual, 0, atleta.length);
+
+		                        document.getElementById('button-datos-sig').style.display = "block";	
+							}
+
+	            		}
 	            	}
 
 	            },
-
-
 
 	            error: function (xhr, ajaxOptions, thrownError) {
 
@@ -955,15 +844,11 @@
 	        });
 
 		}
-
     }
-
-
 
     function incluir_atleta(obj, posicion, id, nombre, edad, datos_tarifa){
 
-    	
-
+    
     	var horario_i = new Array();
 
     	var ubicaciones = $(obj).closest('tr').find('input[type=radio]');
@@ -1215,10 +1100,7 @@
 	        });
 
     	}
-
     }
-
-
 
 	function soloNumeros(e){
 
@@ -1237,12 +1119,7 @@
 
 
 		}
-
-
-
 	}
-
-
 
     function formatDate(date, delimiter) {
 
@@ -1263,34 +1140,14 @@
 	        year = d.getFullYear();
 
 
-
-
-
-
-
 	    if (month.length < 2) month = '0' + month;
-
-
 
 	    if (day.length < 2) day = '0' + day;
 
-
-
-
-
-
-
 	    return [year, month, day].join(delimiter);
-
-
-
 	}
 
-
-
 	function recalcular_resumen(cantidad_alumnos, fecha_limite, porc_individual, porc_grupal, servicio){
-
-
 
 		if((servicio == 'Vacacional') || (servicio == 'Campamento')){
 
@@ -1322,8 +1179,6 @@
 
 				}
 
-
-
 			}else{
 
 				document.getElementById('tr_descuento').style.display = "none";
@@ -1345,16 +1200,7 @@
 			}
 
 		}
-
-		else if(servicio == 'Academia'){
-
-
-
-		}
-
 	}
-
-
 
 	function calcularEdad(fecha) {
 
@@ -1397,12 +1243,7 @@
 
 
 	    return edad;
-
-
-
 	}
-
-
 
 	function calcularSemanaRestantes(date){
 
@@ -1457,10 +1298,7 @@
     	
 
     	return semana;
-
 	}
-
-
 
 	function cuentaDiasHabilesLego(inicio, fin){
 
@@ -1557,19 +1395,14 @@
 
 
 	   return diashabiles;
-
 	}
-
-	
 
 	var total_diario = 0;
 
 	var subtotal_diario = 0;
 
-
-
     function agregar_nino(preguntas, datos_tarifa, servicio){
-
+    	
     	var dia_actual = new Date().getDate();
 
     	var cantidad_alumnos = $('#lista-atletas tbody').children().length;
@@ -1583,8 +1416,6 @@
 		var table = document.getElementById("lista-atletas");
 
     	var row = table.insertRow(0);
-
-
 
 		var text1 = document.getElementById('atleta_fecha_nacimiento').value;
 
@@ -1630,7 +1461,7 @@
 
 			var edad = calcularEdad(text1);	
 
-			if((servicio == 'Vacacional') || (servicio == 'Campamento')){
+			if((servicio == 'Vacacional') || (servicio == 'Campamento') || (servicio == 'Workshop')){
 
 				if(datos_tarifa.edad_fin != null){
 
@@ -1771,10 +1602,10 @@
 			}
 
 			//var text6 = document.getElementById('atleta_talla_top').value;
-			var text6 = "";
+			var text6 = null;
 
 			//var text7 = document.getElementById('atleta_talla_camiseta').value;
-			var text7 = "";
+			var text7 = null;
 
 			//var locacion = document.querySelector('input[name="check_ubicacion_academia"]:checked');
 
@@ -2009,7 +1840,7 @@
 
 			var cell2 = row.insertCell(1);
 
-			cell2.innerHTML = '<input value="'+text2+'" type="text" name="form_atleta['+ array_form +'][nombre]" style="border: 0px solid;" readonly="readonly">';
+			cell2.innerHTML = '<input value="" type="hidden" name="form_atleta['+ array_form +'][id]"><input value="'+text2+'" type="text" name="form_atleta['+ array_form +'][nombre]" style="border: 0px solid;" readonly="readonly">';
 
 
 
@@ -2093,7 +1924,12 @@
 
 				cell9.innerHTML = '<a href="#" name="remove" onclick="eliminar_atleta(this, \''+array_form+'\', \''+dia_actual+'\', \''+datos_tarifa.fecha_limite+'\', \''+datos_tarifa.porc_individual+'\', \''+datos_tarifa.porc_grupal+'\', \''+servicio+'\', \''+datos_tarifa.descuento+'\')"><i class="fa fa-times"></i></a>';
 
-			}else{
+			}else if(servicio == 'Workshop'){
+				var a = {id: "", nombre_completo: text2 + ' ' + text9};
+				pago_workshop(this, a, dia_actual, datos_tarifa.fecha_limite, datos_tarifa.porc_individual, datos_tarifa.porc_grupal, datos_tarifa.descuento, datos_tarifa.tarifa);
+				cell9.innerHTML = '-';
+			}
+			else{
 
 				cell9.innerHTML = '<a href="#" name="remove" onclick="eliminar_invitado(this)"><i class="fa fa-times"></i></a>';
 
@@ -2140,12 +1976,7 @@
 			swal("Oops...", error_message, "error");
 
 		}
-
-    
-
     }
-
-
 
     function recalcularTarifaAcademia(id_table, date, descuento_academia, cantd_alumnos){
 
@@ -2154,8 +1985,6 @@
 		var total = 0;
 
 		var descuento = 0;
-
-
 
 		$("table#" + id_table + " tr td").map(function () {
 
@@ -2202,60 +2031,24 @@
 		document.getElementById('academia_descuento').innerHTML = '<input value="'+parseFloat(descuento).toFixed(2)+'" type="hidden" name="factura[descuento]" style="border: 0px solid;" readonly="readonly">$  ' + parseFloat(descuento).toFixed(2);
 
 		document.getElementById('academia_total').innerHTML = '<input value="'+parseFloat(total).toFixed(2)+'" type="hidden" name="factura[total]" style="border: 0px solid;" readonly="readonly">$ ' + parseFloat(total).toFixed(2);
-
     }
-
-
 
     function eliminar_atleta(obj, id_atleta, date, fecha_limite, porc_individual, porc_grupal, servicio, descuento_academia){
-
-
-
     	var count = $('#lista-atletas tbody').children().length;
-
-
-
-    	if(servicio == 'Academia'){
-
-
-
-    		$('table#resumen-pago-academia tr#'+id_atleta).remove();
-
-    		recalcularTarifaAcademia("resumen-pago-academia", date, descuento_academia, count);
-
-    	}
-
-
-
     	if(count == 2){
-
-
-
     		document.getElementById('button-datos-sig').style.display = "none";
-
-
-
     	}else{
 
-
-
+    		if(servicio == 'Academia'){
+	    		$('table#resumen-pago-academia tr#'+id_atleta).remove();
+	    		recalcularTarifaAcademia("resumen-pago-academia", date, descuento_academia, count);
+	    	}
 	    	recalcular_resumen(count, fecha_limite, porc_individual, porc_grupal, servicio);
-
-
-
 	    	document.getElementById('button-datos-sig').style.display = "block";
-
     	}
 
-
-
     	$(obj).closest('tr').remove();
-
-
-
     }
-
-
 
 	function agregarZero(i) {
 
@@ -2266,10 +2059,7 @@
 	    }
 
 	    return i;
-
 	}
-
-
 
     function disponibilidad_reserva(){
 
@@ -2410,10 +2200,7 @@
     		swal("Ocurrió un error!", error_message, "error");
 
     	}
-
     }
-
-
 
     function agregar_invitado(){
 
@@ -2588,10 +2375,7 @@
     		swal("Ocurrió un error!", error_message, "error");
 
 		}
-
     }
-
-
 
     function detalles_alquiler(alquiler_id){
 
@@ -2620,18 +2404,12 @@
 
 
         });
-
     }
-
-
 
     function eliminar_invitado(obj){
 
     	$(obj).closest('tr').remove();
-
     }
-
-
 
     function validar_form_alquiler(){
 
@@ -2728,10 +2506,7 @@
     		swal("Ocurrió un error!", error_message, "error");
 
 		}
-
     }
-
-
 
     function registrar_pago_alquiler(idalquiler, id){
 
@@ -2806,10 +2581,7 @@
             }
 
         });
-
     }
-
-
 
     function pago_vacacional(id){
 
@@ -2884,10 +2656,158 @@
             }
 
         });
-
     }
 
+    var factura_ids = [];
 
+    function pago_workshop(obj, atleta, dia_actual, f_limite, porc_individual, porc_grupal, descuento, tarifa){
+    	//console.log(dia_actual + ', ' + f_limite + ', ' + porc_individual + ', ' + porc_grupal + ', ' + descuento);
+    	
+    	var tr = $(obj).closest('tr');
+    	
+    	if(tr[0] != undefined){
+    		tr[0].style.display = 'none';
+    		factura_ids.push(atleta.id);
+    	}
+    	
+		var table = document.getElementById("resumen-pago");
+		var row = table.insertRow(0);
+
+		var cell0 = row.insertCell(0);
+		cell0.innerHTML = atleta.nombre_completo;
+
+		var cell1 = row.insertCell(1);
+		cell1.innerHTML = '$ '+ tarifa;
+
+		$('#resumen-pago tbody').append(row);
+
+		var cantd_ins = $("#resumen-pago tbody tr").length;
+		var subtotal = cantd_ins * tarifa;
+		var descuento = 0;
+		var valor_individual = 0;
+		var dcto_individual = 0;
+		
+		var hoy = new Date();
+		hoy = formatDate(hoy, '-');
+
+		if(hoy <= f_limite){
+			var desc = (tarifa * porc_individual)/100;
+			descuento = desc * cantd_ins;
+			dcto_individual = desc;
+			valor_individual = tarifa - dcto_individual;
+		}
+		
+		var total = subtotal - descuento;
+
+		document.getElementById('academia_subtotal').innerHTML = '<input value="'+valor_individual+'" type="hidden" name="factura[valor_individual]" style="border: 0px solid;" readonly="readonly"><input value="'+dcto_individual+'" type="hidden" name="factura[dcto_individual]" style="border: 0px solid;" readonly="readonly"><input value="'+factura_ids+'" type="hidden" name="factura[ids]" style="border: 0px solid;" readonly="readonly"><input value="'+parseFloat(subtotal).toFixed(2)+'" type="hidden" name="factura[subtotal]" style="border: 0px solid;" readonly="readonly">$ ' + parseFloat(subtotal).toFixed(2);
+		document.getElementById('academia_descuento').innerHTML = '<input value="'+parseFloat(descuento).toFixed(2)+'" type="hidden" name="factura[descuento]" style="border: 0px solid;" readonly="readonly">$  ' + parseFloat(descuento).toFixed(2);
+		document.getElementById('academia_total').innerHTML = '<input value="'+parseFloat(total).toFixed(2)+'" type="hidden" name="factura[total]" style="border: 0px solid;" readonly="readonly">$ ' + parseFloat(total).toFixed(2);
+    }
+
+	function registrar_pago_workshop(id){
+		swal({
+			title: 'Modificar pago',
+			input: 'text',
+			inputAttributes: {
+				autocapitalize: 'off'
+			},
+			showCancelButton: true,
+			confirmButtonText: 'Registrar pago',
+			showLoaderOnConfirm: true,
+		}).then((monto) => {
+			if(isNaN(monto.value)){
+				swal("Ocurrió un error!", 'No es un monto válido', "error");
+			}else{
+				$.ajax({
+		           	url: 'registrar/pago',
+		            dataType: "JSON",
+		            type: 'GET',
+		            data: {id: id, monto: monto.value },
+		            success: function (response) {
+		            	if(response.status == 'success'){
+		            		swal("Hecho!", response.msg, "success");
+
+		            		if(document.getElementById("status_" + id).className.match(/(?:^|\s)label-warning(?!\S)/)){
+								document.getElementById("status_" + id).className = document.getElementById("status_" + id).className.replace( /(?:^|\s)label-warning(?!\S)/g , '');
+								document.getElementById("status_" + id).className += ' label-success';
+		            			document.getElementById("status_" + id).innerHTML = 'Pagado';
+		            			document.getElementById("pago_" + id).innerHTML = parseFloat(monto.value).toFixed(2);
+		            			document.getElementById("link_" + id).innerHTML = '-';
+		            		}
+		            	}else{
+		            		swal("Ocurrió un error!", response.msg, "error");
+		            	}
+		            },
+
+		            error: function (xhr, ajaxOptions, thrownError) {
+		                swal("Ocurrió un error!", "Por favor, intente de nuevo", "error");
+		            }
+		        });
+			}
+		})
+	}
+
+	function deshabilitar_inscripcion_workshop(id){
+		swal({
+
+            title: "Deshabilitar inscripción",
+
+			text: "¿Está seguro de inhabilitar a este alumno?",
+
+			icon: "warning",
+
+            showCancelButton: true,
+
+            confirmButtonColor: '#DD4B39',
+
+            cancelButtonColor: '#00C0EF',
+
+            buttons: ["Cancelar", true],
+
+            closeOnConfirm: false
+
+        }).then(function(isConfirm) {
+
+            if (isConfirm.value) {
+
+				$.ajax({
+
+		           	url: 'deshabilitar/inscripcion/'+id,
+
+		            dataType: "JSON",
+
+		            type: 'GET',
+
+		            success: function (response) {
+
+		            	if(response.status == 'success'){
+
+		            		swal("Hecho!", response.msg, "success");
+
+		            		location.reload();
+
+		            	}else{
+
+		            		swal("Ocurrió un error!", response.msg, "error");
+
+		            	}
+
+		                
+
+		            },
+
+		            error: function (xhr, ajaxOptions, thrownError) {
+
+		                swal("Ocurrió un error!", "Por favor, intente de nuevo", "error");
+
+		            }
+
+		        });
+
+            }
+
+        });
+	}
 
 	function deshabilitar_inscripcion_vacacional(id){
 
@@ -2952,10 +2872,7 @@
             }
 
         });
-
 	}
-
-
 
     function pago_campamento(id){
 
@@ -3030,10 +2947,7 @@
             }
 
         });
-
     }
-
-
 
 	function deshabilitar_inscripcion_campamento(id){
 
@@ -3096,10 +3010,7 @@
             }
 
         });
-
 	}
-
-
 
 	function listado_asistencia(){
 
@@ -3212,7 +3123,7 @@
 	            		$("#tabla-asistencia tbody").html("");
 
 
-	            		console.log(atletas);
+	            		//console.log(atletas);
 	            		
 	            		$.each(atletas, function(id, info) {
 
@@ -3301,10 +3212,7 @@
 	    	swal("Ocurrió un error!", error_message, "error");	
 
 		}
-
 	}
-
-
 
 	function inArray(needle, haystack) {
 
@@ -3317,13 +3225,9 @@
 	    }
 
 	    return false;
-
 	}
 
-
-
 	function empty(e) {
-
 		switch (e) {
 
 			case "":
@@ -3345,16 +3249,11 @@
 				return false;
 
 		}
-
 	}
-
-
 
 	function recuperar_clase(){
 
 		var id_alumno_recupera_clase = $("#recupera-clase option:selected").val();
-
-
 
 		if(empty(!id_alumno_recupera_clase)){
 
@@ -3425,7 +3324,5 @@
 			}
 
 		}
-
 	}
-
 </script>

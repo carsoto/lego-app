@@ -93,6 +93,11 @@ class Atleta extends Eloquent
 		return $this->hasMany(\App\InscripcionesVacacional::class, 'atletas_id');
 	}
 
+	public function inscripciones_workshop()
+	{
+		return $this->hasMany(\App\InscripcionesWorkshop::class, 'atletas_id');
+	}
+
 	public function representantes()
 	{
 		return $this->belongsToMany(\App\Representante::class, 'representantes_atletas', 'atletas_id', 'representantes_id')

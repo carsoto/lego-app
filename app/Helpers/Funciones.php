@@ -236,5 +236,25 @@ class Funciones{
         return $inscrito_mes;
     }
 
+    public static function inscritos_workshop(){
+        $inscritos = DB::select(DB::raw("
+            SELECT i.id AS ins_id, a.id, CONCAT(r.apellidos, ', ', r.nombres) AS representante, CONCAT(a.apellido, ', ', a.nombre) AS alumno, a.fecha_nacimiento, TIMESTAMPDIFF(YEAR, a.fecha_nacimiento, CURDATE()) AS edad, i.fecha_inscripcion, a.instituto AS colegio, GROUP_CONCAT(wf.fecha_inicio ORDER BY wf.fecha_inicio ASC SEPARATOR ' / ' ) AS horario, l.ubicacion AS locacion, i.pago AS pago, i.estatus_pago AS status
+            FROM
+                inscripciones_workshop i
+            INNER JOIN workshop_horarios h ON i.workshop_horarios_id = h.id
+            INNER JOIN workshop_fechas wf ON i.workshop_horarios_id = h.id
+            INNER JOIN atletas a ON a.id = i.atletas_id
+            INNER JOIN representantes_atletas ra ON ra.atletas_id = a.id
+            INNER JOIN representantes r ON ra.representantes_id = r.id  
+            INNER JOIN workshop c ON h.workshop_id = c.id
+            INNER JOIN locaciones l ON l.id = c.locaciones_id
+            WHERE i.activo = 1
+            GROUP BY a.id
+            ORDER BY a.apellido ASC
+        "));
+
+        return $inscritos;
+    }
+
 }
 
