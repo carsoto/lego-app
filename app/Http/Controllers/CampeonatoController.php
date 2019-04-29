@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 
 use App\Locacion;
 
+use App\InformacionAdicional;
 
+use Funciones;
+
+use Carbon\Carbon;
 
 class CampeonatoController extends Controller
 
@@ -23,14 +27,53 @@ class CampeonatoController extends Controller
      */
 
     public function index()
-
     {
 
-        /*$locaciones = Locacion::where('activo', '=', 1)->get();
+        $locaciones = Locacion::where('activo', '=', 1)->get();
 
-        return view('adminlte::campeonato.index', array('locaciones' => $locaciones));*/
+        $preguntas = InformacionAdicional::all();
 
-        return view('adminlte::campeonato.index');
+        $tallas = Funciones::tallas();
+
+        $datos_tarifas = array();
+
+        $tarifa = 0;
+
+        foreach($locaciones AS $key => $locacion){
+
+            if(count($locacion->workshop()->where('activo', '=', 1)->get()) > 0){
+
+                foreach($locacion->workshop()->where('activo', '=', 1)->get() AS $key => $workshop){
+
+                    foreach($workshop->workshop_horarios()->where('activo', '=', 1)->get() AS $key => $horario){
+
+                        $datos_tarifas['workshop'][$locacion->id][$workshop->id][$horario->id] = number_format($horario->tarifa_ins, 2, '.', '');
+                        $tarifa = number_format($horario->tarifa_ins, 2, '.', '');
+
+                    }
+
+                }
+
+                $datos_tarifas['tarifa'] = $tarifa;
+
+                $datos_tarifas['edad_inicio'] = $workshop->edad_inicio;
+
+                $datos_tarifas['edad_fin'] = $workshop->edad_fin;
+
+                $datos_tarifas['porc_individual'] = $workshop->porcentaje_individual;
+
+                $datos_tarifas['porc_grupal'] = $workshop->porcentaje_grupal;
+
+                $datos_tarifas['fecha_limite'] = Carbon::parse($workshop->fecha_limite)->format('Y-m-d');
+
+            }
+        }
+        //dd($datos_tarifas);
+        return view('adminlte::campeonato.index', array('locaciones' => $locaciones, 'preguntas' => $preguntas, 'tallas' => $tallas, 'datos_tarifas' => $datos_tarifas, 'servicio' => 'Campeonato'));
+
+        //return view('adminlte::campeonato.index', array('locaciones' => $locaciones, 'datos_tarifas' => $datos_tarifas));
+
+        //return view('adminlte::campeonato.index');
     }
 
 
