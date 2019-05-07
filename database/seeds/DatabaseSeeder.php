@@ -52,5 +52,11 @@ class DatabaseSeeder extends Seeder
         $this->call(WorkshopHorariosTableSeeder::class);
         
         $this->call(WorkshopFechasTableSeeder::class);
+
+        $this->call(CampeonatoTableSeeder::class);
+
+        $this->call(CampeonatoHorariosTableSeeder::class);
+        
+        $this->call(CampeonatoCategoriasTableSeeder::class);
     }
 }

@@ -41,39 +41,36 @@ class CampeonatoController extends Controller
 
         foreach($locaciones AS $key => $locacion){
 
-            if(count($locacion->workshop()->where('activo', '=', 1)->get()) > 0){
+            if(count($locacion->campeonatos()->where('activo', '=', 1)->get()) > 0){
 
-                foreach($locacion->workshop()->where('activo', '=', 1)->get() AS $key => $workshop){
+                foreach($locacion->campeonatos()->where('activo', '=', 1)->get() AS $key => $campeonato){
 
-                    foreach($workshop->workshop_horarios()->where('activo', '=', 1)->get() AS $key => $horario){
+                    foreach($campeonato->campeonato_horarios()->where('activo', '=', 1)->get() AS $key => $horario){
 
-                        $datos_tarifas['workshop'][$locacion->id][$workshop->id][$horario->id] = number_format($horario->tarifa_ins, 2, '.', '');
+                        $datos_tarifas['campeonato'][$locacion->id][$campeonato->id][$horario->id] = number_format($horario->tarifa_ins, 2, '.', '');
                         $tarifa = number_format($horario->tarifa_ins, 2, '.', '');
 
+                        $datos_tarifas['categorias'] = $horario->campeonato_categorias;
                     }
 
                 }
 
                 $datos_tarifas['tarifa'] = $tarifa;
 
-                $datos_tarifas['edad_inicio'] = $workshop->edad_inicio;
+                $datos_tarifas['edad_inicio'] = $campeonato->edad_inicio;
 
-                $datos_tarifas['edad_fin'] = $workshop->edad_fin;
+                $datos_tarifas['edad_fin'] = $campeonato->edad_fin;
 
-                $datos_tarifas['porc_individual'] = $workshop->porcentaje_individual;
+                $datos_tarifas['porc_individual'] = $campeonato->porcentaje_individual;
 
-                $datos_tarifas['porc_grupal'] = $workshop->porcentaje_grupal;
+                $datos_tarifas['porc_grupal'] = $campeonato->porcentaje_grupal;
 
-                $datos_tarifas['fecha_limite'] = Carbon::parse($workshop->fecha_limite)->format('Y-m-d');
-
+                $datos_tarifas['fecha_limite'] = Carbon::parse($campeonato->fecha_limite)->format('Y-m-d');
             }
         }
+
         //dd($datos_tarifas);
         return view('adminlte::campeonato.index', array('locaciones' => $locaciones, 'preguntas' => $preguntas, 'tallas' => $tallas, 'datos_tarifas' => $datos_tarifas, 'servicio' => 'Campeonato'));
-
-        //return view('adminlte::campeonato.index', array('locaciones' => $locaciones, 'datos_tarifas' => $datos_tarifas));
-
-        //return view('adminlte::campeonato.index');
     }
 
 

@@ -18,7 +18,7 @@ class WorkshopTableSeeder extends Seeder
         );
 
         foreach (array_chunk($array_records, 100) as $records) {
-			\DB::table('workshop')->insert($records);
+            \DB::table('workshop')->insert($records);
         }
     }
 }

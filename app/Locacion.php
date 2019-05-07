@@ -63,6 +63,11 @@ class Locacion extends Eloquent
 		return $this->hasMany(\App\Campamento::class, 'locaciones_id');
 	}
 
+	public function campeonatos()
+	{
+		return $this->hasMany(\App\Campeonato::class, 'locaciones_id');
+	}
+
 	public function horarios()
 	{
 		return $this->hasMany(\App\Horario::class, 'locaciones_id');

@@ -14,7 +14,7 @@
 
 @if($servicio == 'Academia')
 	<div class="col-lg-12" id="ficha-atleta" style="padding-top: 15px; display: none;">
-@elseif($servicio == 'Workshop')
+@elseif($servicio == 'Workshop' || $servicio == 'Campeonato')
 	<div class="col-lg-12 collapse" id="ficha-atleta" style="padding-top: 15px;">
 @else
 	<div class="col-lg-12" id="ficha-atleta" style="padding-top: 15px;">
