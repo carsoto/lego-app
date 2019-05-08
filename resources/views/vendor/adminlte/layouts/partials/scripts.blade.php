@@ -779,7 +779,7 @@
 		                        }	
 							}
 						
-						}else if(servicio == 'Workshop'){
+						}else if(servicio == 'Workshop' || servicio == 'Campeonato'){
 							
 							document.getElementById('div-lista-atletas-registrados').style.display = 'block';
 
@@ -819,8 +819,15 @@
 
 			                        	var cell5 = row.insertCell(5);
 			                        	var a = { id: atleta[i].id, nombre_completo: nombre_completo };
-			                        	//cell5.innerHTML = '<a href="#" name="add" onclick="pago_workshop(this, \''+JSON.stringify(atleta[i])+'\', \''+dia_actual+'\', \''+datos_tarifa.fecha_limite+'\', \''+datos_tarifa.porc_individual+'\', \''+datos_tarifa.porc_grupal+'\', \''+datos_tarifa.descuento+'\')" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-plus"></i> Inscribir al workshop</a>';			                        	console.log();
-			                        	cell5.innerHTML = "<a href='#' name='add' onclick='pago_workshop(this, "+JSON.stringify(a)+", \""+dia_actual+"\", \""+datos_tarifa.fecha_limite+"\", \""+datos_tarifa.porc_individual+"\", \""+datos_tarifa.porc_grupal+"\", \""+datos_tarifa.descuento+"\", \""+datos_tarifa.tarifa+"\")' class='btn btn-sm btn-flat btn-primary'><i class='fa fa-plus'></i> Inscribir al workshop</a>";
+
+			                        	if(servicio == 'Workshop'){
+			                        		cell5.innerHTML = "<a href='#' name='add' onclick='pago_workshop(this, "+JSON.stringify(a)+", \""+dia_actual+"\", \""+datos_tarifa.fecha_limite+"\", \""+datos_tarifa.porc_individual+"\", \""+datos_tarifa.porc_grupal+"\", \""+datos_tarifa.descuento+"\", \""+datos_tarifa.tarifa+"\")' class='btn btn-sm btn-flat btn-primary'><i class='fa fa-plus'></i> Inscribir al workshop</a>";
+			                        	}
+
+			                        	if(servicio == 'Campeonato'){
+			                        		cell5.innerHTML = "<a href='#' name='add' onclick='pago_campeonato(this, "+JSON.stringify(a)+", \""+dia_actual+"\", \""+datos_tarifa.fecha_limite+"\", \""+datos_tarifa.porc_individual+"\", \""+datos_tarifa.porc_grupal+"\", \""+datos_tarifa.descuento+"\", \""+datos_tarifa.tarifa+"\")' class='btn btn-sm btn-flat btn-primary'><i class='fa fa-plus'></i> Inscribir al campeonato</a>";
+			                        	}
+			                        	
 
 			                        	$('#lista-atletas tbody').append(row);
 		                        	}
@@ -1461,7 +1468,7 @@
 
 			var edad = calcularEdad(text1);	
 
-			if((servicio == 'Vacacional') || (servicio == 'Campamento') || (servicio == 'Workshop')){
+			if((servicio == 'Vacacional') || (servicio == 'Campamento') || (servicio == 'Workshop') || (servicio == 'Campeonato')){
 
 				if(datos_tarifa.edad_fin != null){
 
@@ -1927,6 +1934,11 @@
 			}else if(servicio == 'Workshop'){
 				var a = {id: "", nombre_completo: text2 + ' ' + text9};
 				pago_workshop(this, a, dia_actual, datos_tarifa.fecha_limite, datos_tarifa.porc_individual, datos_tarifa.porc_grupal, datos_tarifa.descuento, datos_tarifa.tarifa);
+				cell9.innerHTML = '-';
+			}
+			else if(servicio == 'Campeonato'){
+				var a = {id: "", nombre_completo: text2 + ' ' + text9};
+				pago_campeonato(this, a, dia_actual, datos_tarifa.fecha_limite, datos_tarifa.porc_individual, datos_tarifa.porc_grupal, datos_tarifa.descuento, datos_tarifa.tarifa);
 				cell9.innerHTML = '-';
 			}
 			else{
@@ -2661,7 +2673,6 @@
     var factura_ids = [];
 
     function pago_workshop(obj, atleta, dia_actual, f_limite, porc_individual, porc_grupal, descuento, tarifa){
-    	//console.log(dia_actual + ', ' + f_limite + ', ' + porc_individual + ', ' + porc_grupal + ', ' + descuento);
     	
     	var tr = $(obj).closest('tr');
     	
@@ -2807,6 +2818,254 @@
             }
 
         });
+	}
+
+	function deshabilitar_inscripcion_vacacional(id){
+
+		swal({
+
+            title: "Deshabilitar inscripción",
+
+			text: "¿Está seguro de inhabilitar a este alumno?",
+
+			icon: "warning",
+
+            showCancelButton: true,
+
+            confirmButtonColor: '#DD4B39',
+
+            cancelButtonColor: '#00C0EF',
+
+            buttons: ["Cancelar", true],
+
+            closeOnConfirm: false
+
+        }).then(function(isConfirm) {
+
+        	
+
+            if (isConfirm.value) {
+
+				$.ajax({
+
+		           	url: 'deshabilitar/inscripcion/'+id,
+
+		            dataType: "JSON",
+
+		            type: 'GET',
+
+		            success: function (response) {
+
+		            	if(response.status == 'success'){
+
+		            		swal("Hecho!", response.msg, "success");
+
+		            		location.reload();
+
+		            	}else{
+
+		            		swal("Ocurrió un error!", response.msg, "error");
+
+		            	}
+
+		                
+
+		            },
+
+		            error: function (xhr, ajaxOptions, thrownError) {
+
+		                swal("Ocurrió un error!", "Por favor, intente de nuevo", "error");
+
+		            }
+
+		        });
+
+            }
+
+        });
+	}
+
+	function pago_campeonato(obj, atleta, dia_actual, f_limite, porc_individual, porc_grupal, descuento, tarifa){
+    	
+    	var tr = $(obj).closest('tr');
+    	
+    	if(tr[0] != undefined){
+    		tr[0].style.display = 'none';
+    		factura_ids.push(atleta.id);
+    	}
+    	
+		var table = document.getElementById("resumen-pago");
+		var row = table.insertRow(0);
+
+		var cell0 = row.insertCell(0);
+		cell0.innerHTML = atleta.nombre_completo;
+
+		var cell1 = row.insertCell(1);
+		cell1.innerHTML = '$ '+ tarifa;
+
+		$('#resumen-pago tbody').append(row);
+
+		var cantd_ins = $("#resumen-pago tbody tr").length;
+		var subtotal = cantd_ins * tarifa;
+		var descuento = 0;
+		var valor_individual = 0;
+		var dcto_individual = 0;
+		
+		var hoy = new Date();
+		hoy = formatDate(hoy, '-');
+
+		if(hoy <= f_limite){
+			var desc = (tarifa * porc_individual)/100;
+			descuento = desc * cantd_ins;
+			dcto_individual = desc;
+			valor_individual = tarifa - dcto_individual;
+		}
+		
+		var total = subtotal - descuento;
+
+		document.getElementById('academia_subtotal').innerHTML = '<input value="'+valor_individual+'" type="hidden" name="factura[valor_individual]" style="border: 0px solid;" readonly="readonly"><input value="'+dcto_individual+'" type="hidden" name="factura[dcto_individual]" style="border: 0px solid;" readonly="readonly"><input value="'+factura_ids+'" type="hidden" name="factura[ids]" style="border: 0px solid;" readonly="readonly"><input value="'+parseFloat(subtotal).toFixed(2)+'" type="hidden" name="factura[subtotal]" style="border: 0px solid;" readonly="readonly">$ ' + parseFloat(subtotal).toFixed(2);
+		document.getElementById('academia_descuento').innerHTML = '<input value="'+parseFloat(descuento).toFixed(2)+'" type="hidden" name="factura[descuento]" style="border: 0px solid;" readonly="readonly">$  ' + parseFloat(descuento).toFixed(2);
+		document.getElementById('academia_total').innerHTML = '<input value="'+parseFloat(total).toFixed(2)+'" type="hidden" name="factura[total]" style="border: 0px solid;" readonly="readonly">$ ' + parseFloat(total).toFixed(2);
+    }
+
+	function registrar_pago_campeonato(id){
+		swal({
+			title: 'Modificar pago',
+			input: 'text',
+			inputAttributes: {
+				autocapitalize: 'off'
+			},
+			showCancelButton: true,
+			confirmButtonText: 'Registrar pago',
+			showLoaderOnConfirm: true,
+		}).then((monto) => {
+			if(isNaN(monto.value)){
+				swal("Ocurrió un error!", 'No es un monto válido', "error");
+			}else{
+				$.ajax({
+		           	url: 'registrar/pago',
+		            dataType: "JSON",
+		            type: 'GET',
+		            data: {id: id, monto: monto.value },
+		            success: function (response) {
+		            	if(response.status == 'success'){
+		            		swal("Hecho!", response.msg, "success");
+
+		            		if(document.getElementById("status_" + id).className.match(/(?:^|\s)label-warning(?!\S)/)){
+								document.getElementById("status_" + id).className = document.getElementById("status_" + id).className.replace( /(?:^|\s)label-warning(?!\S)/g , '');
+								document.getElementById("status_" + id).className += ' label-success';
+		            			document.getElementById("status_" + id).innerHTML = 'Pagado';
+		            			document.getElementById("pago_" + id).innerHTML = parseFloat(monto.value).toFixed(2);
+		            			document.getElementById("link_" + id).innerHTML = '-';
+		            		}
+		            	}else{
+		            		swal("Ocurrió un error!", response.msg, "error");
+		            	}
+		            },
+
+		            error: function (xhr, ajaxOptions, thrownError) {
+		                swal("Ocurrió un error!", "Por favor, intente de nuevo", "error");
+		            }
+		        });
+			}
+		})
+	}
+
+	function deshabilitar_inscripcion_campeonato(id){
+		swal({
+
+            title: "Deshabilitar inscripción",
+
+			text: "¿Está seguro de inhabilitar a este alumno?",
+
+			icon: "warning",
+
+            showCancelButton: true,
+
+            confirmButtonColor: '#DD4B39',
+
+            cancelButtonColor: '#00C0EF',
+
+            buttons: ["Cancelar", true],
+
+            closeOnConfirm: false
+
+        }).then(function(isConfirm) {
+
+            if (isConfirm.value) {
+
+				$.ajax({
+
+		           	url: 'deshabilitar/inscripcion/'+id,
+
+		            dataType: "JSON",
+
+		            type: 'GET',
+
+		            success: function (response) {
+
+		            	if(response.status == 'success'){
+
+		            		swal("Hecho!", response.msg, "success");
+
+		            		location.reload();
+
+		            	}else{
+
+		            		swal("Ocurrió un error!", response.msg, "error");
+
+		            	}
+
+		                
+
+		            },
+
+		            error: function (xhr, ajaxOptions, thrownError) {
+
+		                swal("Ocurrió un error!", "Por favor, intente de nuevo", "error");
+
+		            }
+
+		        });
+
+            }
+
+        });
+	}
+
+	function proceso_campeonato(obj, paso){
+		var cantd_ins = $("#resumen-pago tbody tr").length;
+		
+		if(!$(obj).hasClass('nextBtn')){
+			if(cantd_ins > 0){
+				if((cantd_ins%2) == 0){
+					$(obj).addClass('nextBtn');
+					var navListItems = $('div.setup-panel div a'), allWells = $('.setup-content'), allNextBtn = $('.nextBtn');
+					
+					var $target = $($(obj).attr('href')),
+						$item = $(obj);
+						
+						navListItems.removeClass('btn-danger').addClass('btn-default');
+					    $item.addClass('btn-danger');
+					    allWells.hide();
+					    $target.show();
+					    $target.find('input:eq(0)').focus();
+
+					var curStep = $(obj).closest(".setup-content"),
+					    curStepBtn = curStep.attr("id"),
+					    nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+					    curInputs = curStep.find("input[type='text'],input[type='url']"),
+					    isValid = true;
+					    nextStepWizard.removeAttr('disabled').trigger('click');
+				}else{
+					swal("Ocurrió un error!", 'La cantidad de inscritos debe ser por pares', "error");
+				}
+			}else{
+				swal("Ocurrió un error!", 'Debe inscribir mínimo a 2 atletas', "error");
+			}
+		
+		}
+		
 	}
 
 	function deshabilitar_inscripcion_vacacional(id){

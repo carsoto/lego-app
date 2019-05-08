@@ -1,7 +1,7 @@
 @extends('adminlte::layouts.allpublic')
 
 @section('htmlheader_title')
-    Vacacional
+    Campeonato
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
                 <div class="box box-danger">
                     <div class="box-body">
 						@section('title-content')
-							¡Te esperamos en nuestro próximo WORKSHOP!
+							¡Te esperamos en nuestro próximo CAMPEONATO!
 						@endsection
 						@include('adminlte::layouts.principal')
                         @if($status)

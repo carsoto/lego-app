@@ -1,7 +1,7 @@
 @extends('adminlte::layouts.allpublic')
 
 @section('htmlheader_title')
-    Vacacional
+    Workshop
 @endsection
 
 @section('content')

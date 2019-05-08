@@ -8,6 +8,14 @@ use App\Locacion;
 
 use App\InformacionAdicional;
 
+use App\Representante;
+
+use App\Atleta;
+
+use App\InscripcionesCampeonato;
+
+use App\CampeonatoFactura;
+
 use Funciones;
 
 use Carbon\Carbon;
@@ -108,11 +116,159 @@ class CampeonatoController extends Controller
      */
 
     public function store(Request $request)
-
     {
+        try {
 
-        //
+            $cantidad_alumnos = count($request->form_atleta);
 
+            $atletas_registrados = array();
+
+            $locaciones = Locacion::where('activo', '=', 1)->get();
+            
+            $count = 0;
+
+            foreach($locaciones AS $key => $locacion){
+
+                if(count($locacion->campeonatos()->where('activo', '=', 1)->get()) > 0){
+
+                    foreach($locacion->campeonatos()->where('activo', '=', 1)->get() AS $key => $campeonato){
+                        $h["fecha_limite"] = $campeonato->fecha_limite;
+                        $h["porcentaje_individual"] = $campeonato->porcentaje_individual;
+                        $h["id"] = $campeonato->id;
+                        foreach($campeonato->campeonato_horarios()->where('activo', '=', 1)->get() AS $key => $horario){
+                            $h["horario_id"] = $horario->id;
+                            $tarifa = number_format($horario->tarifa_ins, 2, '.', '');
+                            $h["tarifa"] = $tarifa;
+                        }
+                    }
+                }
+            }
+
+            if($request->representante["id"] == null){
+                if($request->representante["cedula"] != null){
+                    $representante = Representante::firstOrCreate(['cedula' => $request->representante["cedula"]], [ 
+
+                        'cedula' => $request->representante["cedula"],
+
+                        'nombres' => $request->representante["nombres"],
+
+                        'apellidos' => $request->representante["apellidos"],
+
+                        'telf_contacto' => $request->representante["telf_contacto"],
+
+                        'email' => $request->representante["email"],
+
+                        'red_social' => $request->representante["red_social"],
+
+                    ]);    
+                }
+            }else{
+                $representante = Representante::updateOrCreate(['cedula' => $request->representante["cedula"]], [ 
+
+                    'cedula' => $request->representante["cedula"],
+
+                    'nombres' => $request->representante["nombres"],
+
+                    'apellidos' => $request->representante["apellidos"],
+
+                    'telf_contacto' => $request->representante["telf_contacto"],
+
+                    'email' => $request->representante["email"],
+
+                    'red_social' => $request->representante["red_social"],
+
+                ]);  
+            }
+           
+            
+            foreach($request->form_atleta AS $key => $atleta){
+                if($atleta["id"] == null){
+                    if($atleta["cedula"] != ""){
+                        $atleta_reg = Atleta::firstOrCreate(['cedula' => $atleta["cedula"]], [ 
+                            'cedula' => $atleta["cedula"],
+                            'nombre' => $atleta["nombre"],
+                            'apellido' => $atleta["apellido"],
+                            'genero' => $atleta["genero"],
+                            'fecha_nacimiento' => $atleta["fecha_nacimiento"],
+                            'red_social' => $atleta["red_social"],
+                            'instituto' => $atleta["instituto"],
+                            'talla_top' => $atleta["talla_top"],
+                            'talla_camiseta' => $atleta["talla_camiseta"]
+
+                        ]);    
+
+                    }else{
+
+                        $atleta_reg = Atleta::create([ 
+                            'cedula' => $atleta["cedula"],
+                            'nombre' => $atleta["nombre"],
+                            'apellido' => $atleta["apellido"],
+                            'genero' => $atleta["genero"],
+                            'fecha_nacimiento' => $atleta["fecha_nacimiento"],
+                            'red_social' => $atleta["red_social"],
+                            'instituto' => $atleta["instituto"],
+                            'talla_top' => $atleta["talla_top"],
+                            'talla_camiseta' => $atleta["talla_camiseta"]
+                        ]);
+                    }
+
+                    $representante->atletas()->sync($atleta_reg->id, false);
+                    $count++;
+
+                    $ins_campeonato = InscripcionesCampeonato::firstOrCreate(['atletas_id' => $atleta_reg->id, 'campeonato_horarios_id' => $h['horario_id']], [
+                        'atletas_id' => $atleta_reg->id,
+                        'campeonato_horarios_id' => $h['horario_id'],
+                        'tarifa' => $h['tarifa'],
+                        'descuento' => $request->factura["dcto_individual"],
+                        'pago' => $request->factura["valor_individual"],
+                        'estatus_pago' => 'Pendiente',
+                        'fecha_inscripcion' => date('Y-m-d'),
+                        'activo' => 1,
+                    ]);
+                }
+            }
+
+            if($request->factura["ids"] != null){
+                $ids_reg = explode(',', $request->factura["ids"]);
+                foreach ($ids_reg as $key => $value) {
+                    $ins_campeonato = InscripcionesCampeonato::firstOrCreate(['atletas_id' => $value, 'campeonato_horarios_id' => $h['horario_id']], [
+                        'atletas_id' => $value,
+                        'campeonato_horarios_id' => $h['horario_id'],
+                        'tarifa' => $h['tarifa'],
+                        'descuento' => $request->factura["dcto_individual"],
+                        'pago' => $request->factura["valor_individual"],
+                        'estatus_pago' => 'Pendiente',
+                        'fecha_inscripcion' => date('Y-m-d'),
+                        'activo' => 1,
+                    ]);
+                }
+            }
+
+            CampeonatoFactura::firstOrCreate([
+                'campeonatos_id' => $h['id'],
+                'representantes_id' => $representante->id,
+                'fecha' => date('Y-m-d'),
+                'subtotal' => $request->factura["subtotal"],
+                'descuento' => $request->factura["descuento"],
+                'total' => $request->factura["total"],
+                'status' => 'Pendiente',
+                'tipo_pago' => 'Efectivo',
+            ]);
+
+            $msg = 'Proceso finalizado con éxito, te esperamos en la academia.';
+
+            $status = true;
+            
+
+        } catch (Exception $e) {
+
+            $msg = $e;
+
+            $status = false;
+
+        }
+
+        return view('adminlte::campeonato.inscripcion_finalizada', array('message' => $msg, 'status' => $status));
     }
 
 
