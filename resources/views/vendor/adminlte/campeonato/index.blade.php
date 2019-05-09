@@ -25,6 +25,10 @@
                                     </div>
                                     <div class="stepwizard-step">
                                         <a href="#step-2" type="button" class="btn nextBtn btn-default btn-circle" disabled="disabled">2</a>
+                                        <p>Inscribir duplas</p>
+                                    </div>
+                                    <div class="stepwizard-step">
+                                        <a href="#step-3" type="button" class="btn nextBtn btn-default btn-circle" disabled="disabled">3</a>
                                         <p>Finalizar</p>
                                     </div>
                                 </div>
@@ -38,6 +42,16 @@
                                     </div>
                                 </div>
                                 <div class="row setup-content" id="step-2">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        @include('adminlte::campeonato.crear_duplas', ['categorias' => $datos_tarifas['categorias']])
+                                        <div class="pull-right">
+
+                                            <button class="btn btn-danger nextBtn btn-md pull-right" type="button" style="" id="button-datos-sig" onclick="">Siguiente <i class="fa fa-angle-double-right"></i></button>  
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row setup-content" id="step-3">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         @include('adminlte::campeonato.resumen_pago')
                                         <div class="pull-right">

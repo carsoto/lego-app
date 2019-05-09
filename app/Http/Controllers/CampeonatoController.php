@@ -118,7 +118,7 @@ class CampeonatoController extends Controller
     public function store(Request $request)
     {
         try {
-
+            dd($request);
             $cantidad_alumnos = count($request->form_atleta);
 
             $atletas_registrados = array();

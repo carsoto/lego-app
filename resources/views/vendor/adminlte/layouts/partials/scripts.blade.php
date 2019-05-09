@@ -638,9 +638,15 @@
     function buscarRegistros(servicio, datos_tarifas){
     	var result = document.getElementById('cedula_rep_registrado');
 
+    	$('#cedula_rep_registrado').attr("readonly", "readonly");
+
+    	$('#btn_cargar_datos').attr("disabled", true);
+
     	if ((result.value == "") || (!/^([0-9])*$/.test(result.value))){
 
 			swal("Ocurrió un error!", "La cédula <strong>" + result.value + "</strong> no es un número", "error");
+			$('#cedula_rep_registrado').removeAttr("readonly");
+    		$('#btn_cargar_datos').removeAttr("disabled");
 
 		}else{
 
@@ -671,11 +677,11 @@
 	            	if(response.status == 'error'){
 
 						swal("Ocurrió un error!", response.msj, response.status);
-
+						$('#cedula_rep_registrado').removeAttr("readonly");
+    					$('#btn_cargar_datos').removeAttr("disabled");
 	            	}
 
 	            	else{
-
 	            		var representante = response.representante;
 
 	            		var atleta = response.atletas;
@@ -2886,7 +2892,7 @@
 	}
 
 	function pago_campeonato(obj, atleta, dia_actual, f_limite, porc_individual, porc_grupal, descuento, tarifa){
-    	
+    	//console.log(atleta);
     	var tr = $(obj).closest('tr');
     	
     	if(tr[0] != undefined){
@@ -2904,6 +2910,9 @@
 		cell1.innerHTML = '$ '+ tarifa;
 
 		$('#resumen-pago tbody').append(row);
+
+		$('#select_dupla_1').append('<option value="'+atleta.nombre_completo+'" id="'+atleta.id+'">'+ atleta.nombre_completo +'</option>');
+		$('#select_dupla_2').append('<option value="'+atleta.nombre_completo+'" id="'+atleta.id+'">'+ atleta.nombre_completo +'</option>');
 
 		var cantd_ins = $("#resumen-pago tbody tr").length;
 		var subtotal = cantd_ins * tarifa;
@@ -2924,7 +2933,9 @@
 		var total = subtotal - descuento;
 
 		document.getElementById('academia_subtotal').innerHTML = '<input value="'+valor_individual+'" type="hidden" name="factura[valor_individual]" style="border: 0px solid;" readonly="readonly"><input value="'+dcto_individual+'" type="hidden" name="factura[dcto_individual]" style="border: 0px solid;" readonly="readonly"><input value="'+factura_ids+'" type="hidden" name="factura[ids]" style="border: 0px solid;" readonly="readonly"><input value="'+parseFloat(subtotal).toFixed(2)+'" type="hidden" name="factura[subtotal]" style="border: 0px solid;" readonly="readonly">$ ' + parseFloat(subtotal).toFixed(2);
+
 		document.getElementById('academia_descuento').innerHTML = '<input value="'+parseFloat(descuento).toFixed(2)+'" type="hidden" name="factura[descuento]" style="border: 0px solid;" readonly="readonly">$  ' + parseFloat(descuento).toFixed(2);
+
 		document.getElementById('academia_total').innerHTML = '<input value="'+parseFloat(total).toFixed(2)+'" type="hidden" name="factura[total]" style="border: 0px solid;" readonly="readonly">$ ' + parseFloat(total).toFixed(2);
     }
 
@@ -3031,6 +3042,64 @@
             }
 
         });
+	}
+
+	function inscribir_dupla(){
+
+		var mensaje_error = '';
+		var dupla1 = $('#select_dupla_1 option:selected').text();
+		var dupla2 = $('#select_dupla_2 option:selected').text();
+
+		if($('#select_dupla_1').val() == 0){
+			mensaje_error += '<li>Debe seleccionar al jugador 1</li>';
+		}
+		
+		if($('#select_dupla_2').val() == 0){
+			mensaje_error += '<li>Debe seleccionar al jugador 2</li>';
+		}
+		
+		if($('#select_categoria').val() == 0){
+			mensaje_error += '<li>Debe seleccionar la categoria</li>';
+		}
+
+		if(dupla1 == dupla2){
+			mensaje_error += '<li>Seleccionó al mismo jugador para la dupla</li>';
+		}
+
+		if(mensaje_error != ""){
+			swal("Ocurrió un error!", '<div class="text-left"><ul>' + mensaje_error + '</ul></div>', "error");
+		}else{
+			swal({
+				title: '¿Está seguro de inscribir esta dupla?',
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				cancelButtonText: 'Cancelar',
+				confirmButtonText: 'Inscribir'
+			}).then((result) => {
+				if (result.value) {
+					var table = document.getElementById("lista-duplas");
+					row = table.insertRow();
+					var cell0 = row.insertCell(0);
+					cell0.innerHTML = '<input type="hidden" name=duplas[][jugador1] value="'+ dupla1 +'"/>'+ dupla1;
+
+					var cell1 = row.insertCell(1);
+					cell1.innerHTML = '<input type="hidden" name=duplas[][jugador2] value="'+ dupla2 +'"/>'+ dupla2;
+
+					var cell2 = row.insertCell(2);
+					cell2.innerHTML = '<input type="hidden" name=duplas[][categoria] value="'+ $('#select_categoria option:selected').text() +'"/>'+ $('#select_categoria option:selected').text();
+
+					$("#select_dupla_1 option[value='"+dupla1+"']").remove();
+					$("#select_dupla_1 option[value='"+dupla2+"']").remove();
+
+					$("#select_dupla_2 option[value='"+dupla1+"']").remove();
+					$("#select_dupla_2 option[value='"+dupla2+"']").remove();
+
+					$('#lista-duplas tbody').append(row);
+				}
+			});	
+		}
 	}
 
 	function proceso_campeonato(obj, paso){

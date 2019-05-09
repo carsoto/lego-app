@@ -6,7 +6,7 @@
 
 	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="padding-top: 4px;">
 	    <br>
-	    <button class="btn btn-sm btn-flat btn-block btn-danger" type="button" onclick="buscarRegistros('{{ $servicio }}', {{ json_encode($datos_tarifas) }});"><i class="fa fa-refresh"></i> CARGAR DATOS</button>
+	    <button class="btn btn-sm btn-flat btn-block btn-danger" type="button" onclick="buscarRegistros('{{ $servicio }}', {{ json_encode($datos_tarifas) }});" id="btn_cargar_datos"><i class="fa fa-refresh"></i> CARGAR DATOS</button>
 	</div>
 </div>
 
