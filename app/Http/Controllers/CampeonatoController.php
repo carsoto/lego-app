@@ -16,9 +16,12 @@ use App\InscripcionesCampeonato;
 
 use App\CampeonatoFactura;
 
+use App\CampeonatoDupla;
+
 use Funciones;
 
 use Carbon\Carbon;
+
 
 class CampeonatoController extends Controller
 
@@ -118,7 +121,7 @@ class CampeonatoController extends Controller
     public function store(Request $request)
     {
         try {
-            dd($request);
+
             $cantidad_alumnos = count($request->form_atleta);
 
             $atletas_registrados = array();
@@ -126,6 +129,8 @@ class CampeonatoController extends Controller
             $locaciones = Locacion::where('activo', '=', 1)->get();
             
             $count = 0;
+
+            //$atletas_regs = array();
 
             foreach($locaciones AS $key => $locacion){
 
@@ -212,6 +217,7 @@ class CampeonatoController extends Controller
                         ]);
                     }
 
+                    
                     $representante->atletas()->sync($atleta_reg->id, false);
                     $count++;
 
@@ -225,6 +231,23 @@ class CampeonatoController extends Controller
                         'fecha_inscripcion' => date('Y-m-d'),
                         'activo' => 1,
                     ]);
+
+                    $atletas_regs[$atleta["nombre"].' '.$atleta["apellido"]] = $atleta_reg->id;
+                }
+            }
+
+            if($request->duplas["categoria"] > 0){
+                for ($dd=0; $dd < count($request->duplas["categoria"]); $dd++) { 
+                    $dupla = new CampeonatoDupla();
+                    $dupla->campeonato_categorias_id = $request->duplas["categoria"][$dd];
+                    $dupla->representantes_id = $representante->id;
+                    $dupla->atleta_id_jugador1 = ($request->duplas["id_jugador1"][$dd] != '') ? $request->duplas["id_jugador1"][$dd] : $atletas_regs[$request->duplas["jugador1"][$dd]];
+                    $dupla->jugador_1 = $request->duplas["jugador1"][$dd];
+                    $dupla->atleta_id_jugador2 = ($request->duplas["id_jugador2"][$dd] != '') ? $request->duplas["id_jugador2"][$dd] : $atletas_regs[$request->duplas["jugador2"][$dd]];
+                    $dupla->jugador_2 = $request->duplas["jugador2"][$dd];
+                    $dupla->save();
+
+
                 }
             }
 

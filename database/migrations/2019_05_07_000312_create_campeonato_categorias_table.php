@@ -16,6 +16,7 @@ class CreateCampeonatoCategoriasTable extends Migration
         Schema::create('campeonato_categorias', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->integer('campeonato_horarios_id')->unsigned();
+            $table->integer('edad_minima');
             $table->string('anyo_inicio');
             $table->string('anyo_fin');
         

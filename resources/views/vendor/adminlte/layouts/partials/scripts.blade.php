@@ -824,7 +824,7 @@
 			                        	cell4.innerHTML = atleta[i].instituto;
 
 			                        	var cell5 = row.insertCell(5);
-			                        	var a = { id: atleta[i].id, nombre_completo: nombre_completo };
+			                        	var a = { id: atleta[i].id, nombre_completo: nombre_completo, edad: edad};
 
 			                        	if(servicio == 'Workshop'){
 			                        		cell5.innerHTML = "<a href='#' name='add' onclick='pago_workshop(this, "+JSON.stringify(a)+", \""+dia_actual+"\", \""+datos_tarifa.fecha_limite+"\", \""+datos_tarifa.porc_individual+"\", \""+datos_tarifa.porc_grupal+"\", \""+datos_tarifa.descuento+"\", \""+datos_tarifa.tarifa+"\")' class='btn btn-sm btn-flat btn-primary'><i class='fa fa-plus'></i> Inscribir al workshop</a>";
@@ -1943,7 +1943,7 @@
 				cell9.innerHTML = '-';
 			}
 			else if(servicio == 'Campeonato'){
-				var a = {id: "", nombre_completo: text2 + ' ' + text9};
+				var a = {id: "", nombre_completo: text2 + ' ' + text9, edad: edad};
 				pago_campeonato(this, a, dia_actual, datos_tarifa.fecha_limite, datos_tarifa.porc_individual, datos_tarifa.porc_grupal, datos_tarifa.descuento, datos_tarifa.tarifa);
 				cell9.innerHTML = '-';
 			}
@@ -2892,9 +2892,10 @@
 	}
 
 	function pago_campeonato(obj, atleta, dia_actual, f_limite, porc_individual, porc_grupal, descuento, tarifa){
-    	//console.log(atleta);
+    	console.log(atleta);
     	var tr = $(obj).closest('tr');
-    	
+    	tarifa = tarifa/2;
+
     	if(tr[0] != undefined){
     		tr[0].style.display = 'none';
     		factura_ids.push(atleta.id);
@@ -2907,12 +2908,12 @@
 		cell0.innerHTML = atleta.nombre_completo;
 
 		var cell1 = row.insertCell(1);
-		cell1.innerHTML = '$ '+ tarifa;
+		cell1.innerHTML = '$ '+ parseFloat(tarifa).toFixed(2);
 
 		$('#resumen-pago tbody').append(row);
 
-		$('#select_dupla_1').append('<option value="'+atleta.nombre_completo+'" id="'+atleta.id+'">'+ atleta.nombre_completo +'</option>');
-		$('#select_dupla_2').append('<option value="'+atleta.nombre_completo+'" id="'+atleta.id+'">'+ atleta.nombre_completo +'</option>');
+		$('#select_dupla_1').append('<option value="'+atleta.nombre_completo+'" id="'+atleta.id+'" edad="'+atleta.edad+'">'+ atleta.nombre_completo +'</option>');
+		$('#select_dupla_2').append('<option value="'+atleta.nombre_completo+'" id="'+atleta.id+'" edad="'+atleta.edad+'">'+ atleta.nombre_completo +'</option>');
 
 		var cantd_ins = $("#resumen-pago tbody tr").length;
 		var subtotal = cantd_ins * tarifa;
@@ -3050,6 +3051,9 @@
 		var dupla1 = $('#select_dupla_1 option:selected').text();
 		var dupla2 = $('#select_dupla_2 option:selected').text();
 
+		var edad_dupla1 = $('#select_dupla_1 option:selected').attr('edad');
+		var edad_dupla2 = $('#select_dupla_2 option:selected').attr('edad');
+
 		if($('#select_dupla_1').val() == 0){
 			mensaje_error += '<li>Debe seleccionar al jugador 1</li>';
 		}
@@ -3082,13 +3086,13 @@
 					var table = document.getElementById("lista-duplas");
 					row = table.insertRow();
 					var cell0 = row.insertCell(0);
-					cell0.innerHTML = '<input type="hidden" name=duplas[][jugador1] value="'+ dupla1 +'"/>'+ dupla1;
+					cell0.innerHTML = '<input type="hidden" name=duplas[id_jugador1][] value="'+ $('#select_dupla_1 option:selected').attr('id') +'"/><input type="hidden" name=duplas[jugador1][] value="'+ dupla1 +'"/>'+ dupla1;
 
 					var cell1 = row.insertCell(1);
-					cell1.innerHTML = '<input type="hidden" name=duplas[][jugador2] value="'+ dupla2 +'"/>'+ dupla2;
+					cell1.innerHTML = '<input type="hidden" name=duplas[id_jugador2][] value="'+ $('#select_dupla_2 option:selected').attr('id') +'"/><input type="hidden" name=duplas[jugador2][] value="'+ dupla2 +'"/>'+ dupla2;
 
 					var cell2 = row.insertCell(2);
-					cell2.innerHTML = '<input type="hidden" name=duplas[][categoria] value="'+ $('#select_categoria option:selected').text() +'"/>'+ $('#select_categoria option:selected').text();
+					cell2.innerHTML = '<input type="hidden" name=duplas[categoria][] value="'+ $('#select_categoria option:selected').val() +'"/>'+ $('#select_categoria option:selected').text();
 
 					$("#select_dupla_1 option[value='"+dupla1+"']").remove();
 					$("#select_dupla_1 option[value='"+dupla2+"']").remove();
