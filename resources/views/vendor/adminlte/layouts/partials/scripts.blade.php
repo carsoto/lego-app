@@ -3053,6 +3053,7 @@
 
 		var edad_dupla1 = $('#select_dupla_1 option:selected').attr('edad');
 		var edad_dupla2 = $('#select_dupla_2 option:selected').attr('edad');
+		var edad_permitida = $('#select_categoria option:selected').attr('edad_permitida');
 
 		if($('#select_dupla_1').val() == 0){
 			mensaje_error += '<li>Debe seleccionar al jugador 1</li>';
@@ -3068,6 +3069,14 @@
 
 		if(dupla1 == dupla2){
 			mensaje_error += '<li>Seleccionó al mismo jugador para la dupla</li>';
+		}
+
+		if(edad_dupla1 > edad_permitida){
+			mensaje_error += '<li>' + dupla1 + ' no aplica para esta categoria</li>';
+		}
+
+		if(edad_dupla2 > edad_permitida){
+			mensaje_error += '<li>' + dupla2 + ' no aplica para esta categoria</li>';
 		}
 
 		if(mensaje_error != ""){

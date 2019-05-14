@@ -9,12 +9,12 @@
         <option value="0">Seleccionar jugador 2</option>
     </select>
 </div>
-
 <div class="col-lg-3 col-md-3 col-sm-12">
     <select class="form-control input-md" id="select_categoria">
         <option value="0">Seleccionar categoría</option>
+
         @foreach($categorias AS $key => $categoria)
-            <option value="{{ $categoria->id }}">{{ $categoria->anyo_inicio }} - {{ $categoria->anyo_fin }}</option>
+            <option value="{{ $categoria->id }}" edad_permitida="{{ $categoria->edad_maxima }}">{{ $categoria->anyo_inicio }} - {{ $categoria->anyo_fin }}</option>
         @endforeach
     </select>
 </div>

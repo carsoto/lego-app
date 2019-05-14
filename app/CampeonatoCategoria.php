@@ -26,11 +26,12 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 class CampeonatoCategoria extends Eloquent
 {
 	protected $casts = [
-		'campeonato_horarios_id' => 'int'
+		'campeonato_horarios_id' => 'int', 'edad_maxima' => 'int'
 	];
 
 	protected $fillable = [
 		'campeonato_horarios_id',
+		'edad_maxima',
 		'anyo_inicio',
 		'anyo_fin'
 	];

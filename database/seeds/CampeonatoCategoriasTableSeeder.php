@@ -14,9 +14,9 @@ class CampeonatoCategoriasTableSeeder extends Seeder
         set_time_limit(0);
 
         $array_records = array (
-            array('campeonato_horarios_id' => 1, 'anyo_inicio' => '2005', 'anyo_fin' => '2006', 'created_at' => date('Y-m-d')),
-            array('campeonato_horarios_id' => 1, 'anyo_inicio' => '2007', 'anyo_fin' => '2008', 'created_at' => date('Y-m-d')),
-            array('campeonato_horarios_id' => 1, 'anyo_inicio' => '2009', 'anyo_fin' => '2010', 'created_at' => date('Y-m-d')),
+            array('campeonato_horarios_id' => 1, 'edad_maxima' => 14, 'anyo_inicio' => '2005', 'anyo_fin' => '2006', 'created_at' => date('Y-m-d')),
+            array('campeonato_horarios_id' => 1, 'edad_maxima' => 12, 'anyo_inicio' => '2007', 'anyo_fin' => '2008', 'created_at' => date('Y-m-d')),
+            array('campeonato_horarios_id' => 1, 'edad_maxima' => 10, 'anyo_inicio' => '2009', 'anyo_fin' => '2010', 'created_at' => date('Y-m-d')),
         );
 
         foreach (array_chunk($array_records, 100) as $records) {
