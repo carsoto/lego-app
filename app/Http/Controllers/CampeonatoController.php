@@ -84,6 +84,18 @@ class CampeonatoController extends Controller
         return view('adminlte::campeonato.index', array('locaciones' => $locaciones, 'preguntas' => $preguntas, 'tallas' => $tallas, 'datos_tarifas' => $datos_tarifas, 'servicio' => 'Campeonato'));
     }
 
+    public function dashboard(){
+
+        $inscritos = Funciones::inscritos_campeonato();
+
+        return view('adminlte::campeonato.dashboard', array('inscritos' => $inscritos));
+
+    }
+
+    public function deshabilitar_inscripcion($id){
+        dd(decrypt($id));
+    }
+
 
 
     /**
@@ -184,7 +196,32 @@ class CampeonatoController extends Controller
 
                 ]);  
             }
-           
+
+            if($request->duplas["categoria"] > 0){
+                for ($dd=0; $dd < count($request->duplas["categoria"]); $dd++) { 
+                    $dupla = new CampeonatoDupla();
+                    $dupla->campeonato_categorias_id = $request->duplas["categoria"][$dd];
+                    $dupla->representantes_id = $representante->id;
+                    $dupla->atleta_id_jugador1 = ($request->duplas["id_jugador1"][$dd] != '') ? $request->duplas["id_jugador1"][$dd] : $atletas_regs[$request->duplas["jugador1"][$dd]];
+                    $dupla->jugador_1 = $request->duplas["jugador1"][$dd];
+                    $dupla->atleta_id_jugador2 = ($request->duplas["id_jugador2"][$dd] != '') ? $request->duplas["id_jugador2"][$dd] : $atletas_regs[$request->duplas["jugador2"][$dd]];
+                    $dupla->jugador_2 = $request->duplas["jugador2"][$dd];
+                    $dupla->save();
+
+                    CampeonatoFactura::firstOrCreate([
+                        'campeonatos_id' => $h['id'],
+                        'representantes_id' => $representante->id,
+                        'campeonato_duplas_id' => $dupla->id,
+                        'fecha' => date('Y-m-d'),
+                        'subtotal' => $request->factura["subtotal"],
+                        'descuento' => $request->factura["descuento"],
+                        'total' => $request->factura["total"],
+                        'status' => 'Pendiente',
+                        'tipo_pago' => 'Efectivo',
+                        'activo' => 1
+                    ]);
+                }
+            }
             
             foreach($request->form_atleta AS $key => $atleta){
                 if($atleta["id"] == null){
@@ -236,21 +273,6 @@ class CampeonatoController extends Controller
                 }
             }
 
-            if($request->duplas["categoria"] > 0){
-                for ($dd=0; $dd < count($request->duplas["categoria"]); $dd++) { 
-                    $dupla = new CampeonatoDupla();
-                    $dupla->campeonato_categorias_id = $request->duplas["categoria"][$dd];
-                    $dupla->representantes_id = $representante->id;
-                    $dupla->atleta_id_jugador1 = ($request->duplas["id_jugador1"][$dd] != '') ? $request->duplas["id_jugador1"][$dd] : $atletas_regs[$request->duplas["jugador1"][$dd]];
-                    $dupla->jugador_1 = $request->duplas["jugador1"][$dd];
-                    $dupla->atleta_id_jugador2 = ($request->duplas["id_jugador2"][$dd] != '') ? $request->duplas["id_jugador2"][$dd] : $atletas_regs[$request->duplas["jugador2"][$dd]];
-                    $dupla->jugador_2 = $request->duplas["jugador2"][$dd];
-                    $dupla->save();
-
-
-                }
-            }
-
             if($request->factura["ids"] != null){
                 $ids_reg = explode(',', $request->factura["ids"]);
                 foreach ($ids_reg as $key => $value) {
@@ -266,17 +288,6 @@ class CampeonatoController extends Controller
                     ]);
                 }
             }
-
-            CampeonatoFactura::firstOrCreate([
-                'campeonatos_id' => $h['id'],
-                'representantes_id' => $representante->id,
-                'fecha' => date('Y-m-d'),
-                'subtotal' => $request->factura["subtotal"],
-                'descuento' => $request->factura["descuento"],
-                'total' => $request->factura["total"],
-                'status' => 'Pendiente',
-                'tipo_pago' => 'Efectivo',
-            ]);
 
             $msg = 'Proceso finalizado con éxito, te esperamos en la academia.';
 

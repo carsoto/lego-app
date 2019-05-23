@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 13 May 2019 20:50:03 +0000.
+ * Date: Thu, 16 May 2019 21:22:23 +0000.
  */
 
 namespace App;
@@ -24,6 +24,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property \App\CampeonatoCategoria $campeonato_categoria
  * @property \App\Representante $representante
+ * @property \Illuminate\Database\Eloquent\Collection $campeonato_facturas
+ * @property \Illuminate\Database\Eloquent\Collection $inscripciones_campeonatos
  *
  * @package App
  */
@@ -53,5 +55,15 @@ class CampeonatoDupla extends Eloquent
 	public function representante()
 	{
 		return $this->belongsTo(\App\Representante::class, 'representantes_id');
+	}
+
+	public function campeonato_facturas()
+	{
+		return $this->hasMany(\App\CampeonatoFactura::class, 'campeonatos_id');
+	}
+
+	public function inscripciones_campeonatos()
+	{
+		return $this->hasMany(\App\InscripcionesCampeonato::class, 'campeonato_duplas_id');
 	}
 }

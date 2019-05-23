@@ -144,8 +144,6 @@ class Funciones{
 
     }
 
-
-
     public static function inscritos_academia($modalidad){
 
 
@@ -252,6 +250,18 @@ class Funciones{
             GROUP BY a.id
             ORDER BY a.apellido ASC
         "));
+
+        return $inscritos;
+    }
+
+    public static function inscritos_campeonato(){
+        $inscritos = DB::select(DB::raw("SELECT cd.id AS id_dupla, r.cedula, CONCAT(r.apellidos, ', ', r.nombres) AS representante, cd.atleta_id_jugador1, cd.jugador_1, cd.atleta_id_jugador2, cd.jugador_2, cf.fecha, CONCAT(cc.anyo_inicio, '-', cc.anyo_fin) AS categoria, c.descripcion, l.ubicacion, cf.total, cf.status
+            FROM
+                campeonatos c, representantes r, campeonato_duplas cd, campeonato_categorias cc,
+                campeonato_factura cf, locaciones l
+            WHERE
+                l.id = c.locaciones_id AND r.id = cd.representantes_id AND cc.id = cd.campeonato_categorias_id
+            AND cd.id = cf.campeonato_duplas_id AND cf.campeonatos_id = c.id AND cf.activo = 1 ORDER BY cd.jugador_1 ASC"));
 
         return $inscritos;
     }

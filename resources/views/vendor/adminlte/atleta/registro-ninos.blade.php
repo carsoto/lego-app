@@ -39,7 +39,7 @@
 
 		<div class="col-lg-12" style="padding-top: 20px;">
 			<div class="text-right">
-				<button type="button" class="btn btn-sm btn-flat btn-primary" onclick="agregar_nino({{ $preguntas }}, {{ json_encode($datos_tarifas) }}, '{{ $servicio }}');"><i class="fa fa-plus"></i> Agregar nuevo atleta</button>
+				<button type="button" class="btn btn-sm btn-flat btn-success" onclick="agregar_nino({{ $preguntas }}, {{ json_encode($datos_tarifas) }}, '{{ $servicio }}');"><i class="fa fa-plus"></i> Agregar nuevo atleta</button>
 			</div>
 		</div>
 		<div class="col-lg-12" style="padding-top: 20px;">

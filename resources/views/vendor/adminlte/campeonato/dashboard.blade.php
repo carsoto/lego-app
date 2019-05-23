@@ -1,11 +1,11 @@
 @extends('adminlte::layouts.app')
 
 @section('htmlheader_title')
-    Workshop
+    Campeonato
 @endsection
 
 @section('contentheader_title')
-    Workshop
+    Campeonato
 @endsection
 
 @section('main-content')
@@ -15,51 +15,53 @@
             <div class="box box-danger">
                 <div class="box-body">
                     <div class="table-responsive" style="padding-top: 15px;">
-                        <table id='tabla_workshop' class="table table-hover table-bordered table-striped datatable" style="width:100%; font-size: 11px;">
-                            <thead>
+                        <table id='tabla_workshop' class="table table-hover table-bordered table-striped datatable" style="width:100%;">
+                            <thead style="font-size: 9px;">
                                 <tr>
-                                    <th class="text-center" colspan='10'>INSCRITOS</th>
+                                    <th class="text-center" colspan='11'>INSCRITOS</th>
                                 </tr>
                                 <tr>
+                                	<th>C. representante</th>
                                     <th>Representante</th>
-                                    <th>Alumno</th>
-                                    <th>Edad</th>
-                                    <th>Inscripción</th>
-                                    <th>Colegio</th>
-                                    <th>Fecha</th>
+                                    <th>Jugador 1</th>
+                                    <th>Jugador 2</th>
+                                    <th>F. de Inscripción</th>
+                                    <th>Campeonato</th>
+                                    <th>Categoría</th>
                                     <th>Locación</th>
                                     <th>Pago</th>
                                     <th>Estatus</th>
                                     <th><i class="fa fa-gears"></i></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody style="font-size: 11px;">
                                 @foreach($inscritos AS $key => $inscrito)
                                     <tr>
-                                        <td>{{ ucwords($inscrito->representante) }}</td>
-                                        <td>{{ ucwords($inscrito->alumno) }}</td>
-                                        <td>{{ $inscrito->edad }} años</td>
-                                        <td>{{ Carbon\Carbon::parse($inscrito->fecha_inscripcion)->format('d-m-Y') }}</td>
-                                        <td>{{ ucwords($inscrito->colegio) }}</td>
-                                        <td>{{ $inscrito->horario }}</td>
-                                        <td>{{ $inscrito->locacion }}</td>
-                                        <td><span id="pago_{{ $inscrito->ins_id }}">{{ $inscrito->pago }}</span></td>
-                                        <td>
-                                            @if($inscrito->status == 'Pendiente')
-                                                <span id="status_{{ $inscrito->ins_id }}" class="label label-warning">{{ $inscrito->status }}</span>
-                                            @elseif($inscrito->status == 'Pagado')
-                                                <span id="status_{{ $inscrito->ins_id }}" class="label label-success">{{ $inscrito->status }}</span>
-                                            @endif
-                                        </td>
+	                            		<td>{{ $inscrito->cedula }}</td>
+	                                    <td>{{ ucwords($inscrito->representante) }}</td>
+	                                    <td>{{ ucwords($inscrito->jugador_1) }}</td>
+	                                    <td>{{ ucwords($inscrito->jugador_2) }}</td>
+	                                    <td>{{ Carbon\Carbon::parse($inscrito->fecha)->format('d-m-Y') }}</td>
+	                                    <td>{{ $inscrito->categoria }}</td>
+	                                    <td>{{ ucwords($inscrito->descripcion) }}</td>
+	                                    <td>{{ ucwords($inscrito->ubicacion) }}</td>
+	                                    <td><span id="pago_{{ $inscrito->id_dupla }}">{{ $inscrito->total }}</span></td>
+	                                    <td>
+	                                        @if($inscrito->status == 'Pendiente')
+	                                            <span id="status_{{ $inscrito->id_dupla }}" class="label label-warning">{{ $inscrito->status }}</span>
+	                                        @elseif($inscrito->status == 'Pagado')
+	                                            <span id="status_{{ $inscrito->id_dupla }}" class="label label-success">{{ $inscrito->status }}</span>
+	                                        @endif
+	                                    </td>
 
-                                        <td>
-                                            @if($inscrito->status == 'Pendiente')
-                                                <span id="link_{{ $inscrito->ins_id }}"><a href="#" onclick="registrar_pago_workshop('{{ $inscrito->ins_id }}');"><i class="fa fa-dollar"></i></a> <a href="#" onclick="deshabilitar_inscripcion_workshop('{{ $inscrito->ins_id }}');"><i class="fa fa-trash"></i></a></span>
-                                            @else
-                                                <span id="link_{{ $inscrito->ins_id }}"><a href="#" onclick="deshabilitar_inscripcion_workshop('{{ $inscrito->ins_id }}');"><i class="fa fa-trash"></i></a></span>
-                                            @endif
-                                        </td>
-                                    </tr>
+	                                    <td>
+	                                        @if($inscrito->status == 'Pendiente')
+	                                            <span id="link_{{ $inscrito->id_dupla }}"><a href="#" onclick="registrar_pago_campeonato('{{ $inscrito->id_dupla }}');"><i class="fa fa-dollar"></i></a> <a href="#" onclick="deshabilitar_inscripcion_campeonato('{{ $inscrito->id_dupla }}');"><i class="fa fa-trash"></i></a></span>
+	                                        @else
+	                                            <span id="link_{{ $inscrito->id_dupla }}"><a href="#" onclick="deshabilitar_inscripcion_campeonato('{{ $inscrito->id_dupla }}');"><i class="fa fa-trash"></i></a></span>
+	                                        @endif
+	                                    </td>
+	                            	</tr>
                                 @endforeach
                             </tbody>
                         </table>

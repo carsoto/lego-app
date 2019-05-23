@@ -42,7 +42,7 @@
         <ul class="sidebar-menu">
             <!--<li class="header">{{ trans('adminlte_lang::message.header') }}</li>-->
             <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a href="{{ url('home') }}"><i class='fa fa-home'></i> <span>{{ trans('adminlte_lang::message.home') }}</span></a></li>
+            <!--<li class="active"><a href="{{ url('home') }}"><i class='fa fa-home'></i> <span>{{ trans('adminlte_lang::message.home') }}</span></a></li>-->
             @if(Auth::user()->hasRole('admin'))
                 <li>
                     <a href="#"><span>Academia</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -57,8 +57,8 @@
                 <li><a href="{{ route('vacacional.dashboard') }}"><span>Vacacional</span></a></li>
                 <li><a href="{{ route('campamento.dashboard') }}"><span>Campamento</span></a></li>
                 <li><a href="{{ route('workshop.dashboard') }}"><span>Workshop</span></a></li>
-
-                <li><a href="{{ route('usuarios.index') }}"><i class='fa fa-user'></i><span>Usuarios</span></a></li>
+                <li><a href="{{ route('campeonato.dashboard') }}"><span>Campeonato</span></a></li>
+                <li><a href="{{ route('usuarios.index') }}">Usuarios</span></a></li>
             @elseif(Auth::user()->hasRole('profesor'))
                 <li>
                     <a href="#"><span>Academia</span> <i class="fa fa-angle-left pull-right"></i></a>

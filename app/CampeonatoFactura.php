@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 07 May 2019 01:46:54 +0000.
+ * Date: Thu, 16 May 2019 17:48:24 +0000.
  */
 
 namespace App;
@@ -15,6 +15,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property int $id
  * @property int $campeonatos_id
  * @property int $representantes_id
+ * @property int $campeonato_duplas_id
  * @property \Carbon\Carbon $fecha
  * @property float $subtotal
  * @property float $descuento
@@ -24,6 +25,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * 
+ * @property \App\CampeonatoDupla $campeonato_dupla
  * @property \App\Campeonato $campeonato
  * @property \App\Representante $representante
  *
@@ -36,9 +38,11 @@ class CampeonatoFactura extends Eloquent
 	protected $casts = [
 		'campeonatos_id' => 'int',
 		'representantes_id' => 'int',
+		'campeonato_duplas_id' => 'int',
 		'subtotal' => 'float',
 		'descuento' => 'float',
-		'total' => 'float'
+		'total' => 'float',
+		'activo' => 'int'
 	];
 
 	protected $dates = [
@@ -48,13 +52,20 @@ class CampeonatoFactura extends Eloquent
 	protected $fillable = [
 		'campeonatos_id',
 		'representantes_id',
+		'campeonato_duplas_id',
 		'fecha',
 		'subtotal',
 		'descuento',
 		'total',
 		'status',
-		'tipo_pago'
+		'tipo_pago',
+		'activo'
 	];
+
+	public function campeonato_dupla()
+	{
+		return $this->belongsTo(\App\CampeonatoDupla::class, 'campeonatos_id');
+	}
 
 	public function campeonato()
 	{

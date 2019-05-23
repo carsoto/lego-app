@@ -186,6 +186,13 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('workshop/deshabilitar/inscripcion/{id}', 'WorkshopController@deshabilitar_inscripcion')->name('workshop.deshabilitar.inscripcion');
 
 		Route::get('workshop/registrar/pago', 'WorkshopController@registrarpago')->name('workshop.deshabilitar.registrar.pago');
+
+
+		Route::get('campeonato/resumen', 'CampeonatoController@dashboard')->name('campeonato.dashboard');
+
+		Route::get('campeonato/deshabilitar/inscripcion/{id}', 'CampeonatoController@deshabilitar_inscripcion')->name('campeonato.deshabilitar.inscripcion');
+
+		Route::get('campeonato/registrar/pago', 'CampeonatoController@registrarpago')->name('campeonato.deshabilitar.registrar.pago');
 		
 		
 

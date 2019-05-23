@@ -92,7 +92,7 @@ class AcademiaController extends Controller
 
             $status = "error";
 
-            $msj = "No hay datos registrados a esta cédula";
+            $msj = "No hay datos registrados a esta cédula. Por favor regístrese.";
 
         }else{
 
