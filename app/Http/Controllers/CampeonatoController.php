@@ -132,26 +132,21 @@ class CampeonatoController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request);
         try {
-
             $cantidad_alumnos = count($request->form_atleta);
-
             $atletas_registrados = array();
-
             $locaciones = Locacion::where('activo', '=', 1)->get();
-            
             $count = 0;
-
-            //$atletas_regs = array();
+            $atletas_regs = array();
 
             foreach($locaciones AS $key => $locacion){
-
                 if(count($locacion->campeonatos()->where('activo', '=', 1)->get()) > 0){
-
                     foreach($locacion->campeonatos()->where('activo', '=', 1)->get() AS $key => $campeonato){
                         $h["fecha_limite"] = $campeonato->fecha_limite;
                         $h["porcentaje_individual"] = $campeonato->porcentaje_individual;
                         $h["id"] = $campeonato->id;
+
                         foreach($campeonato->campeonato_horarios()->where('activo', '=', 1)->get() AS $key => $horario){
                             $h["horario_id"] = $horario->id;
                             $tarifa = number_format($horario->tarifa_ins, 2, '.', '');
@@ -163,66 +158,26 @@ class CampeonatoController extends Controller
 
             if($request->representante["id"] == null){
                 if($request->representante["cedula"] != null){
-                    $representante = Representante::firstOrCreate(['cedula' => $request->representante["cedula"]], [ 
-
+                    $representante = Representante::firstOrCreate(['cedula' => $request->cedula], [ 
                         'cedula' => $request->representante["cedula"],
-
                         'nombres' => $request->representante["nombres"],
-
                         'apellidos' => $request->representante["apellidos"],
-
                         'telf_contacto' => $request->representante["telf_contacto"],
-
                         'email' => $request->representante["email"],
-
                         'red_social' => $request->representante["red_social"],
-
                     ]);    
                 }
             }else{
-                $representante = Representante::updateOrCreate(['cedula' => $request->representante["cedula"]], [ 
-
+                $representante = Representante::updateOrCreate(['cedula' => $request->cedula], [ 
                     'cedula' => $request->representante["cedula"],
-
                     'nombres' => $request->representante["nombres"],
-
                     'apellidos' => $request->representante["apellidos"],
-
                     'telf_contacto' => $request->representante["telf_contacto"],
-
                     'email' => $request->representante["email"],
-
                     'red_social' => $request->representante["red_social"],
-
                 ]);  
             }
 
-            if($request->duplas["categoria"] > 0){
-                for ($dd=0; $dd < count($request->duplas["categoria"]); $dd++) { 
-                    $dupla = new CampeonatoDupla();
-                    $dupla->campeonato_categorias_id = $request->duplas["categoria"][$dd];
-                    $dupla->representantes_id = $representante->id;
-                    $dupla->atleta_id_jugador1 = ($request->duplas["id_jugador1"][$dd] != '') ? $request->duplas["id_jugador1"][$dd] : $atletas_regs[$request->duplas["jugador1"][$dd]];
-                    $dupla->jugador_1 = $request->duplas["jugador1"][$dd];
-                    $dupla->atleta_id_jugador2 = ($request->duplas["id_jugador2"][$dd] != '') ? $request->duplas["id_jugador2"][$dd] : $atletas_regs[$request->duplas["jugador2"][$dd]];
-                    $dupla->jugador_2 = $request->duplas["jugador2"][$dd];
-                    $dupla->save();
-
-                    CampeonatoFactura::firstOrCreate([
-                        'campeonatos_id' => $h['id'],
-                        'representantes_id' => $representante->id,
-                        'campeonato_duplas_id' => $dupla->id,
-                        'fecha' => date('Y-m-d'),
-                        'subtotal' => $request->factura["subtotal"],
-                        'descuento' => $request->factura["descuento"],
-                        'total' => $request->factura["total"],
-                        'status' => 'Pendiente',
-                        'tipo_pago' => 'Efectivo',
-                        'activo' => 1
-                    ]);
-                }
-            }
-            
             foreach($request->form_atleta AS $key => $atleta){
                 if($atleta["id"] == null){
                     if($atleta["cedula"] != ""){
@@ -236,7 +191,6 @@ class CampeonatoController extends Controller
                             'instituto' => $atleta["instituto"],
                             'talla_top' => $atleta["talla_top"],
                             'talla_camiseta' => $atleta["talla_camiseta"]
-
                         ]);    
 
                     }else{
@@ -253,14 +207,29 @@ class CampeonatoController extends Controller
                             'talla_camiseta' => $atleta["talla_camiseta"]
                         ]);
                     }
-
                     
                     $representante->atletas()->sync($atleta_reg->id, false);
                     $count++;
 
-                    $ins_campeonato = InscripcionesCampeonato::firstOrCreate(['atletas_id' => $atleta_reg->id, 'campeonato_horarios_id' => $h['horario_id']], [
-                        'atletas_id' => $atleta_reg->id,
+                    $atletas_regs[$atleta["nombre"].' '.$atleta["apellido"]] = $atleta_reg->id;
+                }
+            }
+
+            if($request->duplas["categoria"] > 0){
+                for ($dd=0; $dd < count($request->duplas["categoria"]); $dd++) { 
+                    
+                    $dupla = new CampeonatoDupla();
+                    $dupla->campeonato_categorias_id = $request->duplas["categoria"][$dd];
+                    $dupla->representantes_id = $representante->id;
+                    $dupla->atleta_id_jugador1 = ($request->duplas["id_jugador1"][$dd] != '') ? $request->duplas["id_jugador1"][$dd] : $atletas_regs[$request->duplas["jugador1"][$dd]];
+                    $dupla->jugador_1 = $request->duplas["jugador1"][$dd];
+                    $dupla->atleta_id_jugador2 = ($request->duplas["id_jugador2"][$dd] != '') ? $request->duplas["id_jugador2"][$dd] : $atletas_regs[$request->duplas["jugador2"][$dd]];
+                    $dupla->jugador_2 = $request->duplas["jugador2"][$dd];
+                    $dupla->save();
+
+                    $ins_campeonato = InscripcionesCampeonato::create([
                         'campeonato_horarios_id' => $h['horario_id'],
+                        'campeonato_duplas_id' => $dupla->id,
                         'tarifa' => $h['tarifa'],
                         'descuento' => $request->factura["dcto_individual"],
                         'pago' => $request->factura["valor_individual"],
@@ -269,11 +238,22 @@ class CampeonatoController extends Controller
                         'activo' => 1,
                     ]);
 
-                    $atletas_regs[$atleta["nombre"].' '.$atleta["apellido"]] = $atleta_reg->id;
+                    CampeonatoFactura::firstOrCreate([
+                        'campeonatos_id' => $h['id'],
+                        'representantes_id' => $representante->id,
+                        'campeonato_duplas_id' => $dupla->id,
+                        'fecha' => date('Y-m-d'),
+                        'subtotal' => $request->factura["subtotal"],
+                        'descuento' => $request->factura["descuento"],
+                        'total' => $request->factura["total"],
+                        'status' => 'Pendiente',
+                        'tipo_pago' => 'Efectivo',
+                        'activo' => 1
+                    ]);
                 }
             }
 
-            if($request->factura["ids"] != null){
+            /*if($request->factura["ids"] != null){
                 $ids_reg = explode(',', $request->factura["ids"]);
                 foreach ($ids_reg as $key => $value) {
                     $ins_campeonato = InscripcionesCampeonato::firstOrCreate(['atletas_id' => $value, 'campeonato_horarios_id' => $h['horario_id']], [
@@ -287,7 +267,7 @@ class CampeonatoController extends Controller
                         'activo' => 1,
                     ]);
                 }
-            }
+            }*/
 
             $msg = 'Proceso finalizado con éxito, te esperamos en la academia.';
 
@@ -295,17 +275,12 @@ class CampeonatoController extends Controller
             
 
         } catch (Exception $e) {
-
             $msg = $e;
-
             $status = false;
-
         }
 
         return view('adminlte::campeonato.inscripcion_finalizada', array('message' => $msg, 'status' => $status));
     }
-
-
 
     /**
 

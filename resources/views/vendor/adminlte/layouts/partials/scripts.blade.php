@@ -2002,8 +2002,10 @@
 			}
 			
 			
-
-			document.getElementById('div-lista-atletas-registrados').style.display = 'block';
+			if(document.getElementById('div-lista-atletas-registrados') != null){
+				document.getElementById('div-lista-atletas-registrados').style.display = 'block';	
+			}
+			
 
 			$('#lista-atletas tbody').append(row);
 

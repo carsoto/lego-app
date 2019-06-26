@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 16 May 2019 21:22:30 +0000.
+ * Date: Mon, 27 May 2019 21:55:54 +0000.
  */
 
 namespace App;
@@ -13,7 +13,6 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * Class InscripcionesCampeonato
  * 
  * @property int $id
- * @property int $atletas_id
  * @property int $campeonato_horarios_id
  * @property int $campeonato_duplas_id
  * @property float $tarifa
@@ -25,7 +24,6 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * 
- * @property \App\Atleta $atleta
  * @property \App\CampeonatoDupla $campeonato_dupla
  * @property \App\CampeonatoHorario $campeonato_horario
  *
@@ -36,7 +34,6 @@ class InscripcionesCampeonato extends Eloquent
 	protected $table = 'inscripciones_campeonato';
 
 	protected $casts = [
-		'atletas_id' => 'int',
 		'campeonato_horarios_id' => 'int',
 		'campeonato_duplas_id' => 'int',
 		'tarifa' => 'float',
@@ -50,7 +47,6 @@ class InscripcionesCampeonato extends Eloquent
 	];
 
 	protected $fillable = [
-		'atletas_id',
 		'campeonato_horarios_id',
 		'campeonato_duplas_id',
 		'tarifa',
@@ -60,11 +56,6 @@ class InscripcionesCampeonato extends Eloquent
 		'fecha_inscripcion',
 		'activo'
 	];
-
-	public function atleta()
-	{
-		return $this->belongsTo(\App\Atleta::class, 'atletas_id');
-	}
 
 	public function campeonato_dupla()
 	{
