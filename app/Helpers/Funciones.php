@@ -144,6 +144,8 @@ class Funciones{
 
     }
 
+
+
     public static function inscritos_academia($modalidad){
 
 
@@ -260,7 +262,7 @@ class Funciones{
                 campeonatos c, representantes r, campeonato_duplas cd, campeonato_categorias cc,
                 campeonato_factura cf, locaciones l
             WHERE
-                l.id = c.locaciones_id AND r.id = cd.representantes_id AND cc.id = cd.campeonato_categorias_id
+                l.id = c.locaciones_id AND c.activo = 1 AND r.id = cd.representantes_id AND cc.id = cd.campeonato_categorias_id
             AND cd.id = cf.campeonato_duplas_id AND cf.campeonatos_id = c.id AND cf.activo = 1 ORDER BY cd.jugador_1 ASC"));
 
         return $inscritos;
