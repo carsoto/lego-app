@@ -188,8 +188,8 @@ class CampeonatoController extends Controller
 
     public function deshabilitar_inscripcion($id){
 
-        dd(decrypt($id));
-
+        //$id_dupla = Funciones::id_dupla($id);
+        return $id;
     }
 
 

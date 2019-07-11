@@ -158,7 +158,6 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('academia/resumen', 'AcademiaController@dashboard')->name('academia.dashboard');
 
 
-
 		Route::get('vacacional/resumen', 'VacacionalController@dashboard')->name('vacacional.dashboard');
 
 		Route::get('vacacional/registrar/pago/{id}', 'VacacionalController@registrarpago')->name('vacacional.registrar.pago');
@@ -172,14 +171,11 @@ Route::group(['middleware' => 'auth'], function () {
 
 		Route::get('alquiler/detalles/jugadores/{id}', 'AlquilerController@detallesalquiler')->name('alquiler.detalles');
 
-		
-
 		Route::get('campamento/resumen', 'CampamentoController@dashboard')->name('campamento.dashboard');
 
 		Route::get('campamento/registrar/pago/{id}', 'CampamentoController@registrarpago')->name('campamento.registrar.pago');
 
 		Route::get('campamento/deshabilitar/inscripcion/{id}', 'CampamentoController@deshabilitar_inscripcion')->name('campamento.deshabilitar.inscripcion');
-
 
 		Route::get('workshop/resumen', 'WorkshopController@dashboard')->name('workshop.dashboard');
 
@@ -187,13 +183,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 		Route::get('workshop/registrar/pago', 'WorkshopController@registrarpago')->name('workshop.deshabilitar.registrar.pago');
 
-
 		Route::get('campeonato/resumen', 'CampeonatoController@dashboard')->name('campeonato.dashboard');
 
 		Route::get('campeonato/deshabilitar/inscripcion/{id}', 'CampeonatoController@deshabilitar_inscripcion')->name('campeonato.deshabilitar.inscripcion');
 
 		Route::get('campeonato/registrar/pago', 'CampeonatoController@registrarpago')->name('campeonato.deshabilitar.registrar.pago');
-		
+
+		Route::get('base-de-datos', 'BaseDeDatosController@informacion_detallada')->name('base.datos.detalle.info');
+
+		Route::get('base-de-datos/informacion-representante/{id}', 'BaseDeDatosController@informacion_representante')->name('base.datos.detalle.info.representante');
 		
 
 	});

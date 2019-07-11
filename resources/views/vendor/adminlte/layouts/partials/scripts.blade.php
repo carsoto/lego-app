@@ -7415,4 +7415,24 @@
 
 	}
 
+	function detalles_representante(representante_id){
+
+    	$.ajax({
+           	url: 'base-de-datos/informacion-representante/'+representante_id,
+            dataType: "HTML",
+            type: 'GET',
+
+            success: function (response) {
+            	$('#detalles-representante .modal-body').html(response);
+    			$('#detalles-representante').modal('show');
+            },
+
+            error: function (xhr, ajaxOptions, thrownError) {
+                swal("Ocurrió un error!", "Por favor, intente de nuevo", "error");
+            }
+
+        });
+
+    }
+
 </script>

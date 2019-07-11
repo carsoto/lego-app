@@ -59,6 +59,7 @@
                 <li><a href="{{ route('workshop.dashboard') }}"><span>Workshop</span></a></li>
                 <li><a href="{{ route('campeonato.dashboard') }}"><span>Campeonato</span></a></li>
                 <li><a href="{{ route('usuarios.index') }}">Usuarios</span></a></li>
+                <li><a href="{{ route('base.datos.detalle.info') }}">Base de datos</span></a></li>
             @elseif(Auth::user()->hasRole('profesor'))
                 <li>
                     <a href="#"><span>Academia</span> <i class="fa fa-angle-left pull-right"></i></a>
